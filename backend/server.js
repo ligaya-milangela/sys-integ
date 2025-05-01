@@ -12,7 +12,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000', // React frontend URL
+  origin: 'http://localhost:3003', // React frontend URL
   credentials: true,  // Allow credentials (cookies, authorization headers)
 }));
 
