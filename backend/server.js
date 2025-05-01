@@ -1,34 +1,34 @@
-// src/server.js
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const session = require('cookie-session');
-const googleRoutes = require('./routes/googleRoutes');  // Keep Google Meet routes
+const googleRoutes = require('./routes/googleRoutes');
 const notesRoutes = require('./routes/notes_route');
+const attendanceRoute = require('./routes/attendance_route');
 
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3003', // React frontend URL
-  credentials: true,  // Allow credentials (cookies, authorization headers)
+  origin: 'http://localhost:3000',
+  credentials: true,
 }));
 
-app.use(express.json());  // Middleware to parse incoming JSON data
+app.use(express.json());
 
 // Session handling
 app.use(session({
-  name: 'session',  // Name for the session cookie
-  keys: [process.env.SESSION_SECRET || 'default_key'],  // Session keys
-  maxAge: 24 * 60 * 60 * 1000,  // Session expiration time (1 day)
+  name: 'session',  
+  keys: [process.env.SESSION_SECRET || 'default_key'],  
+  maxAge: 24 * 60 * 60 * 1000,  
 }));
 
 // Routes
-app.use('/auth', googleRoutes);  // Google Meet authentication routes
-
+app.use('/auth', googleRoutes);  
 app.use('/api/notes', notesRoutes);
+app.use('/api/attendance', attendanceRoute);
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {

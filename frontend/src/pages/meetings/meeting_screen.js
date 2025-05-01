@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getNotes, deleteNote } from '../../services/notesService';
-import { useNavigate } from 'react-router-dom';
 
 const MeetingScreen = () => {
   const [meetingNotes, setMeetingNotes] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const fetchMeetingNotes = async () => {
+    try {
+      const response = await getNotes();
+      const meetingNotes = response.data.filter(note => note.isMinute === true);
+      setMeetingNotes(meetingNotes);
+    } catch (err) {
+      console.error('Error fetching notes:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchMeetingNotes = async () => {
-      try {
-        const response = await getNotes();
-        const meetingNotes = response.data.filter(note => note.isMinute === true);
-        setMeetingNotes(meetingNotes);
-      } catch (err) {
-        console.error('Error fetching notes:', err);
-      }
-    };
-
     fetchMeetingNotes();
-  }, []);
+  }, [location]);
 
   const handleNoteClick = (noteId) => {
     navigate(`/minute_note/${noteId}`);
@@ -60,7 +61,7 @@ const MeetingScreen = () => {
               <strong>Content:</strong> {note.content.slice(0, 100)}...<br />
               <strong>Created:</strong> {formatDate(note.createdAt)}<br />
 
-              <button onClick={(e) => { e.stopPropagation(); navigate(`/minute_note_edit/${note._id}`); }}>
+              <button onClick={(e) => { e.stopPropagation(); navigate(`/minute_note_detail/${note._id}`); }}>
                 Edit
               </button>
               <button onClick={(e) => handleDelete(e, note._id)}>

@@ -16,7 +16,7 @@ const MinuteNotesPage = () => {
   }, []);
 
   const handleView = (noteId) => {
-    navigate(`/minute_note/${noteId}`);  // Navigate to the detailed view of the note
+    navigate(`/minute_note/${noteId}`);
   };
 
   return (
@@ -28,7 +28,7 @@ const MinuteNotesPage = () => {
         notes.map(note => (
           <div key={note._id}>
             <h3>{note.title}</h3>
-            <button onClick={() => handleView(note._id)}>View</button>  {/* View button */}
+            <button onClick={() => handleView(note._id)}>View</button>
           </div>
         ))
       )}

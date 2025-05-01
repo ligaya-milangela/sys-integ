@@ -1,4 +1,3 @@
-// src/pages/meetings/minute_create.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNote } from '../../services/notesService';
@@ -10,20 +9,20 @@ const MinuteCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Creating note...');  // Add a log to check the submit action
+    console.log('Creating note...');
     try {
       const noteData = {
         title,
         content,
-        isMinute: true, // Mark this as a meeting note
+        isMinute: true,
       };
 
-      console.log('Note Data:', noteData);  // Check the data being sent
+      console.log('Note Data:', noteData);
 
       const response = await createNote(noteData);
-      console.log('Note created:', response);  // Log the response
+      console.log('Note created:', response); 
 
-      navigate('/meeting_screen'); // Redirect after saving
+      navigate('/meeting_screen');
     } catch (err) {
       console.error('Error creating note:', err);
     }

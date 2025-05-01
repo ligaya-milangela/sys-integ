@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5003/api/notes'; // Update if your backend runs on another port
+const API_URL = 'http://localhost:5003/api/notes';
 
 export const getNotes = () => axios.get(API_URL);
 export const getNoteById = (id) => axios.get(`${API_URL}/${id}`);

@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  date: Date,
-  status: { type: String, enum: ['Present', 'Absent'] },
-});
+  meeting_date: {
+    type: Date,
+    required: true
+  },
+  attendees: {
+    type: [String], 
+    required: true
+  },
+  created_by: {
+    type: String,  
+    required: true
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Attendance', attendanceSchema);
