@@ -13,6 +13,7 @@ const MinuteNoteDetail = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
+        console.log(id)
         const response = await getNoteById(id);
         setNote(response.data);
         if (response.data.attendees) {
@@ -38,30 +39,33 @@ const MinuteNoteDetail = () => {
       console.error('Error submitting note:', err);
     }
   };
-
   const handleAddAttendee = async () => {
     try {
       const response = await getAttendanceById(attendeeIdInput);
       const attendance = response.data;
-
+  
       if (!attendance.attendees || attendance.attendees.length === 0) {
         alert('No attendees found in this attendance record.');
         return;
       }
+  
+      // Merge existing attendees with new ones, avoid duplicates
+      const newAttendees = attendance.attendees;
+      const updatedAttendeesMap = new Map();
+      [...attendees, ...newAttendees].forEach(att => {
+        const id = att._id || att; // fallback if att is still just an ID
+        updatedAttendeesMap.set(id.toString(), att);
+      });
+      setAttendees(Array.from(updatedAttendeesMap.values()));
 
-      const updatedAttendees = attendance.attendees.map((attendeeId) => ({
-        id: attendeeId,
-        name: attendeeId,
-      }));
-
-      setAttendees((prev) => [...prev, ...updatedAttendees]);
+  
       setAttendeeIdInput('');
     } catch (err) {
       alert('Attendance record not found with that ID');
       console.error('Error fetching attendance:', err);
     }
   };
-
+  
   const handleSaveAttendees = async () => {
     try {
       const updatedNote = { attendees };
@@ -71,6 +75,7 @@ const MinuteNoteDetail = () => {
       console.error('Error saving attendees:', err);
       alert('Failed to save attendees.');
     }
+    location.reload()
   };
 
   if (!note) return <div>Loading...</div>;
@@ -85,8 +90,10 @@ const MinuteNoteDetail = () => {
         {attendees.length === 0 ? (
           <li>No attendees yet.</li>
         ) : (
-          attendees.map((att, index) => (
-            <li key={att.id || index}>{att.name || `Unnamed (${att.id})`}</li>
+          attendees.map((attendee) => (
+            <li key={attendee._id || attendee}>
+              {attendee.name || attendee.toString()}
+            </li>
           ))
         )}
       </ul>

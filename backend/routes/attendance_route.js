@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Attendance = require('../models/attendance_model');
-const { getAttendanceById } = require('./attendanceService');
+const User = require('../models/user_model'); // Adjust based on your file structure
+
 router.post('/create', async (req, res) => {
-  console.log("Incoming data:", req.body);  // Log incoming data
 
   const { meeting_date, attendees, created_by } = req.body;
 
@@ -18,10 +18,21 @@ router.post('/create', async (req, res) => {
       return res.status(400).json({ error: "Invalid meeting date." });
     }
 
-  
+    // Fetch ObjectIds for attendees from the User model
+    const attendeesIds = await User.find({ name: { $in: attendees } })
+                                   .select('_id'); // Get only the _id field
+
+    if (attendeesIds.length !== attendees.length) {
+      return res.status(400).json({ error: "Some attendees not found in the system." });
+    }
+
+    // Map the fetched attendees to their ObjectIds
+    const attendeeObjectIds = attendeesIds.map(user => user._id);
+
+    // Create the Attendance document
     const attendance = new Attendance({
       meeting_date: date, 
-      attendees,
+      attendees: attendeeObjectIds,
       created_by,
     });
 
@@ -57,15 +68,14 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch attendance' });
   }
 });
-
 router.get('/details/:id', async (req, res) => {
   try {
-    console.log("hey");
     const attendanceId = req.params.id;
-    console.log('Attendance ID:', attendanceId);
 
-    // Fetch the attendance record using the provided ID
-    const attendanceDetails = await Attendance.findById(attendanceId);
+    // Fetch the attendance record using the provided ID and populate the 'attendees' field
+    const attendanceDetails = await Attendance.findById(attendanceId)
+      .populate('attendees', 'name')  // Populate the attendees field with the 'name' property
+      .exec();
 
     if (!attendanceDetails) {
       return res.status(404).json({ message: 'Attendance details not found' });

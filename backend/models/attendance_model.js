@@ -5,10 +5,11 @@ const attendanceSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  attendees: {
-    type: [String], 
+  attendees: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
     required: true
-  },
+  }],
   created_by: {
     type: String,  
     required: true
