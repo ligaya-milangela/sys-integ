@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const User = require('./models/user_model'); // Adjust path based on your file structure
 
 const sampleUsers = [
-  { name: 'Em', email: 'em@example.com', },
-  { name: 'Gray', email: 'gray@example.com'},
-  { name: 'BBdog', email: 'bbdog@example.com'},
-  { name: 'Chimkolet', email: 'chimkoletg@example.com'},
+  { name: 'User1', email: 'user1@example.com', },
+  { name: 'User2', email: 'user2@example.com'},
+  { name: 'User3', email: 'user3@example.com'},
+  { name: 'User4', email: 'user4g@example.com'},
 ];
 
 async function populateUsers() {
