@@ -71,11 +71,8 @@ router.get('/:id', async (req, res) => {
 router.get('/details/:id', async (req, res) => {
   try {
     const attendanceId = req.params.id;
-
-    // Fetch the attendance record using the provided ID and populate the 'attendees' field
     const attendanceDetails = await Attendance.findById(attendanceId)
-      .populate('attendees', 'name')  // Populate the attendees field with the 'name' property
-      .exec();
+      .populate('attendees', 'name'); // populate only the `name` field
 
     if (!attendanceDetails) {
       return res.status(404).json({ message: 'Attendance details not found' });
@@ -85,6 +82,24 @@ router.get('/details/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching attendance details:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete an attendance record by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const attendanceId = req.params.id;
+
+    const attendance = await Attendance.findByIdAndDelete(attendanceId);
+
+    if (!attendance) {
+      return res.status(404).json({ error: 'Attendance record not found.' });
+    }
+
+    res.status(200).json({ message: 'Attendance deleted successfully.' });
+  } catch (err) {
+    console.error('Error deleting attendance:', err);
+    res.status(500).json({ error: 'Failed to delete attendance' });
   }
 });
 

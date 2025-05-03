@@ -81,37 +81,112 @@ const MinuteNoteDetail = () => {
   if (!note) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h1>{note.title}</h1>
-      <p>{note.content}</p>
+  <div style={{ padding: '20px', fontFamily: 'Segoe UI, sans-serif' }}>
+  <h1 style={{ fontStyle: 'italic', fontWeight: 'normal' }}>{note.title}</h1>
 
-      <h3>Attendees</h3>
-      <ul>
-        {attendees.length === 0 ? (
-          <li>No attendees yet.</li>
-        ) : (
-          attendees.map((attendee) => (
-            <li key={attendee._id || attendee}>
-              {attendee.name || attendee.toString()}
-            </li>
-          ))
-        )}
-      </ul>
+  <p style={{
+    backgroundColor: '#e0ecff',
+    padding: '20px',
+    borderRadius: '10px',
+    fontStyle: 'italic',
+    minWidth: '400px',
+    minHeight: '100px',
+    width: 'fit-content',
+    maxWidth: '600px',
+    marginBottom: '20px'
+  }}>
+    {note.content}
+  </p>
 
+  <div style={{ marginTop: '10px' }}>
+    <label htmlFor="attendeeId" style={{ display: 'block', fontSize: '16px', marginBottom: '5px' }}>
+      Enter Attendance ID
+    </label>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <input
+        id="attendeeId"
         type="text"
         value={attendeeIdInput}
         onChange={(e) => setAttendeeIdInput(e.target.value)}
-        placeholder="Enter Attendance Record ID"
+        placeholder=""
+        style={{
+          padding: '6px 12px',
+          borderRadius: '15px',
+          border: '1px solid #ccc',
+          fontSize: '14px'
+        }}
       />
-      <button onClick={handleAddAttendee}>Add Attendees from ID</button>
-
-      <div style={{ marginTop: '20px' }}>
-        <button onClick={handleSaveAttendees}>Save Attendees</button>
-        <button onClick={handleSubmitForApproval}>Send for Approval</button>
-        <button onClick={handleEdit}>Edit</button>
-      </div>
+      <button
+        onClick={handleAddAttendee}
+        style={{
+          backgroundColor: '#7fe086',
+          border: 'none',
+          borderRadius: '5px',
+          padding: '6px 12px',
+          cursor: 'pointer',
+          outline: '2px solid purple'
+        }}
+      >
+        Add
+      </button>
     </div>
+  </div>
+
+  <h3 style={{ marginTop: '20px' }}>Attendees:</h3>
+  <ul style={{ listStyleType: 'disc', paddingLeft: '20px', fontStyle: 'italic' }}>
+    {attendees.length === 0 ? (
+      <li>No attendees yet.</li>
+    ) : (
+      attendees.map((attendee) => (
+        <li key={attendee._id || attendee}>
+          {attendee.name || attendee.toString()}
+        </li>
+      ))
+    )}
+  </ul>
+
+  <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+    <button
+      onClick={handleEdit}
+      style={{
+        backgroundColor: '#d9d9d9',
+        border: 'none',
+        borderRadius: '10px',
+        padding: '6px 12px',
+        cursor: 'pointer'
+      }}
+    >
+      Edit
+    </button>
+
+    <button
+      onClick={handleSubmitForApproval}
+      style={{
+        backgroundColor: '#b4d8f7',
+        border: 'none',
+        borderRadius: '10px',
+        padding: '6px 12px',
+        cursor: 'pointer'
+      }}
+    >
+      Send for Approval
+    </button>
+
+    <button
+      onClick={handleSaveAttendees}
+      style={{
+        backgroundColor: '#63d374',
+        border: 'none',
+        borderRadius: '10px',
+        padding: '6px 12px',
+        cursor: 'pointer'
+      }}
+    >
+      Save Changes
+    </button>
+  </div>
+</div>
+
   );
 };
 

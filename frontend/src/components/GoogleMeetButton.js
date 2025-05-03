@@ -7,9 +7,24 @@ const GoogleMeetButton = () => {
   };
 
   return (
-    <button onClick={handleCreateMeeting}>
-      Create Google Meet
-    </button>
+    <div style={{ padding: '2rem' }}>
+  {/* <h1 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Google Meet</h1> */}
+
+  <button
+    onClick={handleCreateMeeting}
+    style={{
+      backgroundColor: '#add8f7', 
+      color: 'black',
+      border: 'none',
+      borderRadius: '20px',
+      padding: '10px 20px',
+      fontSize: '1rem',
+      cursor: 'pointer'
+    }}
+  >
+    Click on Google Meet
+  </button>
+</div>
   );
 };
 

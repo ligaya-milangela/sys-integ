@@ -8,29 +8,13 @@ import MinuteNoteDetail from './pages/meetings/minute_note_detail';
 import AttendanceForm from './pages/attendance/attendance_form';
 import AttendanceList from './pages/attendance/attendance_list';
 import AttendanceDetails from './pages/attendance/attendance_details';
-
-function Sidebar() {
-  const navigate = useNavigate();
-
-  return (
-    <div style={{
-      width: '200px',
-      padding: '10px',
-      borderRight: '1px solid #ccc',
-      height: '100vh'
-    }}>
-      <button onClick={() => navigate('/')}>Google Meet</button>
-      <button onClick={() => navigate('/meeting_screen')}>Meeting</button>
-      <button onClick={() => navigate('/attendance')}>Attendance</button>
-    </div>
-  );
-}
-
+import NavBar from './components/nav-bar'; 
 function HomePage() {
   return (
     <div>
       <h2>Google Meet</h2>
       <GoogleMeetButton />
+      <NavBar/>
     </div>
   );
 }
@@ -38,8 +22,8 @@ function HomePage() {
 function App() {
   return (
     <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: '20px' }}>
+      <NavBar />
+      <div style={{ flex: 1, padding: '20px', marginLeft: '200px' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/meeting_screen" element={<MeetingScreen />} />

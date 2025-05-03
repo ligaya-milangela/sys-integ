@@ -38,26 +38,71 @@ function MinuteNoteEdit() {
   };
 
   return (
-    <div>
-      <h2>Edit Minute Note</h2>
-      <label>Title:</label>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+  <div style={{
+    backgroundColor: '#e1effa',
+    padding: '30px',
+    borderRadius: '10px',
+    width: '400px',
+    border: '1px solid #ccc',
+    boxShadow: '0 0 5px rgba(0,0,0,0.1)'
+  }}>
+    <h2 style={{ textAlign: 'center' }}>Edit Minute Note</h2>
+
+    <div style={{ marginBottom: '20px' }}>
+      <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Title:</label><br />
       <input
         type="text"
         name="title"
         value={note.title}
         readOnly
+        style={{
+          width: '100%',
+          padding: '8px',
+          borderRadius: '4px',
+          border: '1px solid #ccc',
+          marginTop: '5px',
+          backgroundColor: '#f5f5f5'
+        }}
       />
-      <br />
-      <label>Content:</label>
+    </div>
+
+    <div style={{ marginBottom: '20px' }}>
+      <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Content:</label><br />
       <textarea
         name="content"
         value={note.content}
         onChange={handleChange}
         placeholder="Content"
+        rows={8}
+        style={{
+          width: '100%',
+          padding: '10px',
+          borderRadius: '4px',
+          border: '1px solid #ccc',
+          marginTop: '5px',
+          resize: 'none'
+        }}
       />
-      <br />
-      <button onClick={handleSave}>Save</button>
     </div>
+
+    <button
+      onClick={handleSave}
+      style={{
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        padding: '8px 20px',
+        border: 'none',
+        borderRadius: '20px',
+        cursor: 'pointer',
+        fontWeight: 'bold'
+      }}
+    >
+      Save
+    </button>
+  </div>
+</div>
+
   );
 }
 

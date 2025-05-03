@@ -3,24 +3,20 @@ const router = express.Router();
 const Note = require('../models/notes_model');  
 const Attendance = require('../models/attendance_model');
 const User = require('../models/user_model'); // Import your User model
-
+// const { getAttendanceById } = require('./attendanceService');
 router.get('/:id', async (req, res) => {
   try {
-    const attendanceId = req.params.id;
-    const attendanceDetails = await Attendance.findById(attendanceId)
-      .populate('attendees', 'name'); // populate only the `name` field
-
-    if (!attendanceDetails) {
-      return res.status(404).json({ message: 'Attendance details not found' });
+    const { id } = req.params;
+    const note = await Note.findById(req.params.id).populate('attendees', 'name');;  
+    console.log(note)
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' });  
     }
-
-    res.json(attendanceDetails);
-  } catch (error) {
-    console.error('Error fetching attendance details:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.json(note);  
+  } catch (err) {
+    res.status(500).json({ error: err.message });  
   }
 });
-
 
 router.get('/', async (req, res) => {
   try {
@@ -72,6 +68,7 @@ router.put('/:id', async (req, res) => {
       const userIds = users.map(user => user._id);
 
       req.body.attendees = userIds;
+     
     }
     
     const updatedNote = await Note.findByIdAndUpdate(id, req.body, { new: true });

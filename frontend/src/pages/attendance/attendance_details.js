@@ -30,18 +30,35 @@ const AttendanceDetails = () => {
   // Render the attendance details if data is available
   if (attendance) {
     return (
-      <div>
-        <h2>Attendance Details</h2>
+      <div style={{ padding: '20px', fontFamily: 'Segoe UI, sans-serif' }}>
+      <h1 style={{ fontStyle: 'italic', fontWeight: 'normal' }}>Attendance Details</h1>
+    
+      <div style={{
+        backgroundColor: '#e0ecff',
+        padding: '20px',
+        borderRadius: '10px',
+        fontStyle: 'italic',
+        minWidth: '400px',
+        minHeight: '100px',
+        width: 'fit-content',
+        maxWidth: '600px',
+        marginBottom: '20px'
+      }}>
         <p><strong>ID:</strong> {attendance._id}</p>
         <p><strong>Date:</strong> {new Date(attendance.meeting_date).toLocaleDateString()}</p>
-        <p><strong>Attendees:</strong>  </p>
-        <ul>
-          {attendance.attendees.map((attendee, index) => (
-            <li key={index}>{attendee.name}</li>  // Display the names of attendees
-          ))}
+        <p><strong>Attendees:</strong></p>
+    
+        <ul style={{ listStyleType: 'disc', paddingLeft: '20px', fontStyle: 'italic' }}>
+          {attendance.attendees.length === 0 ? (
+            <li>No attendees yet.</li>
+          ) : (
+            attendance.attendees.map((attendee, index) => (
+              <li key={index}>{attendee.name}</li> // Display the names of attendees
+            ))
+          )}
         </ul>
-       
       </div>
+    </div>     
     );
   }
 

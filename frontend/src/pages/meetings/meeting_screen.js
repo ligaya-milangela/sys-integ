@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getNotes, deleteNote } from '../../services/notesService';
+// import NavBar from './components/nav-bar'; 
 
 const MeetingScreen = () => {
   const [meetingNotes, setMeetingNotes] = useState([]);
@@ -24,9 +25,8 @@ const MeetingScreen = () => {
   const handleNoteClick = (noteId) => {
     navigate(`/minute_note/${noteId}`);
   };
-
   const handleDelete = async (e, noteId) => {
-    e.stopPropagation();
+    e.stopPropagation();  // Now `e` is a valid event object
     if (window.confirm("Are you sure you want to delete this note?")) {
       try {
         await deleteNote(noteId);
@@ -36,6 +36,7 @@ const MeetingScreen = () => {
       }
     }
   };
+  
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
@@ -43,35 +44,92 @@ const MeetingScreen = () => {
   };
 
   return (
-    <div>
-      <h1>Meeting Notes</h1>
-      <button onClick={() => navigate('/minute_create')}>Create New Minute Note</button>
+    <div style={{ padding: '2rem' }}>
+      {/* <NavBar/> */}
+  <h1 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Meeting Notes</h1>
 
-      {meetingNotes.length === 0 ? (
-        <p>No meeting notes found.</p>
-      ) : (
-        <ul>
-          {meetingNotes.map(note => (
-            <li
-              key={note._id}
-              onClick={() => handleNoteClick(note._id)}
-              style={{ marginBottom: '1em', cursor: 'pointer', border: '1px solid gray', padding: '10px' }}
+  <button
+    onClick={() => navigate('/minute_create')}
+    style={{
+      backgroundColor: '#add8f7',
+      color: 'black',
+      border: 'none',
+      borderRadius: '25px',
+      padding: '10px 20px',
+      fontSize: '1rem',
+      cursor: 'pointer',
+      marginBottom: '1.5rem'
+    }}
+  >
+    Create New Minute Note
+  </button>
+
+  {meetingNotes.length === 0 ? (
+    <p>No meeting notes found.</p>
+  ) : (
+    <ul style={{
+      listStyleType: 'none',
+      padding: 0,
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '1rem'
+    }}>
+      {meetingNotes.map(note => (
+        <li
+          key={note._id}
+          onClick={() => handleNoteClick(note._id)}
+          style={{
+            backgroundColor: '#d3eafd',
+            borderRadius: '15px',
+            border: '1px solid #333',
+            padding: '1rem 1.5rem',
+            cursor: 'pointer',
+            width: '23%',
+            boxSizing: 'border-box'
+          }}
+        >
+          <p><strong>Title:</strong> <em>{note.title}</em></p>
+          <p><strong>Content:</strong> <em>{note.content.slice(0, 100)}...</em></p>
+          <p><strong>Created:</strong> <em>{formatDate(note.createdAt)}</em></p>
+
+          <div style={{ marginTop: '1rem', display: 'flex', gap: '10px' }}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/minute_note_detail/${note._id}`);
+              }}
+              style={{
+                backgroundColor: '#d3d3d3',
+                border: 'none',
+                borderRadius: '15px',
+                padding: '6px 15px',
+                cursor: 'pointer'
+              }}
             >
-              <strong>Title:</strong> {note.title}<br />
-              <strong>Content:</strong> {note.content.slice(0, 100)}...<br />
-              <strong>Created:</strong> {formatDate(note.createdAt)}<br />
+              Edit
+            </button>
 
-              <button onClick={(e) => { e.stopPropagation(); navigate(`/minute_note_detail/${note._id}`); }}>
-                Edit
-              </button>
-              <button onClick={(e) => handleDelete(e, note._id)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+            <button
+              onClick={(e) => handleDelete(e, note._id)}
+              style={{
+                backgroundColor: '#f66',
+                color: 'white',
+                border: 'none',
+                borderRadius: '15px',
+                padding: '6px 15px',
+                cursor: 'pointer'
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
+
   );
 };
 
