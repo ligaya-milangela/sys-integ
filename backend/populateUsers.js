@@ -7,6 +7,11 @@ const sampleUsers = [
   { name: 'Gray', email: 'gray@example.com'},
   { name: 'Lithan', email: 'bbdog@example.com'},
   { name: 'Puti', email: 'lithan@example.com'},
+  { name: 'Ashley', email: 'ashleyn@example.com'},
+  { name: 'Joy', email: 'joy@example.com'},
+  { name: 'Dave', email: 'dave@example.com'},
+  { name: 'Angeline', email: 'Angeline@example.com'},
+  { name: 'Rose', email: 'rose@example.com'},
 ];
 
 async function populateUsers() {
