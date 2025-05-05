@@ -15,6 +15,7 @@ function HomePage() {
       <h2>Google Meet</h2>
       <GoogleMeetButton />
       <NavBar/>
+      <h1>React is working!</h1>
     </div>
   );
 }
