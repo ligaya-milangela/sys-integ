@@ -10,7 +10,7 @@ const AttendanceList = () => {
   useEffect(() => {
     const fetchAttendances = async () => {
       try {
-        const response = await axios.get('http://localhost:5003/api/attendance/list');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/attendance/list`);
         setAttendances(response.data);
       } catch (error) {
         console.error('Error fetching attendance records:', error);

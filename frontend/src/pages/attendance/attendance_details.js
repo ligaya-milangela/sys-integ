@@ -11,7 +11,7 @@ const AttendanceDetails = () => {
     const fetchAttendance = async () => {
       try {
         // Fetching the attendance details using the ID from the URL
-        const response = await axios.get(`http://localhost:5003/api/attendance/details/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/attendance/details/${id}`);
         setAttendance(response.data);  // Setting the data in the state
       } catch (error) {
         console.error('Failed to fetch attendance details:', error);

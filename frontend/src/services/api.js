@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API = 'http://localhost:5003/api';
+const API = `${process.env.REACT_APP_API_URL}/api`;
 
 export const fetchAttendance = () => axios.get(`${API}/attendance/list`);
 export const postAttendance = (data) => axios.post(`${API}/attendance/create`, data);

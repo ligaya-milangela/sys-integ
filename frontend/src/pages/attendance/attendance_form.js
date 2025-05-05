@@ -21,7 +21,7 @@ const AttendanceForm = () => {
     console.log("Submitting attendance data:", attendanceData);
 
     try {
-      const response = await axios.post('http://localhost:5003/api/attendance/create', attendanceData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/attendance/create`, attendanceData);
       console.log("Attendance created:", response.data);
       setSuccessMessage('Attendance created successfully!'),
 

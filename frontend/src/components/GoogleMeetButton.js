@@ -3,7 +3,7 @@ import React from 'react';
 const GoogleMeetButton = () => {
   const handleCreateMeeting = () => {
     // Redirect to the backend to start OAuth and meeting creation
-    window.location.href = 'http://localhost:5003/auth/google';
+    window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
   };
 
   return (
