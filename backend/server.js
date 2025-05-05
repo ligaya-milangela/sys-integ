@@ -8,6 +8,7 @@ const notesRoutes = require('./routes/notes_route');
 const attendanceRoute = require('./routes/attendance_route');
 
 const app = express();
+console.log(process.env.REACT_APP_API_URL);
 
 // Middleware
 app.use(cors({
