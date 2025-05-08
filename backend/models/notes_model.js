@@ -6,8 +6,7 @@ const noteSchema = new mongoose.Schema({
   isMinute: { type: Boolean, default: false },
   submitted: { type: Boolean, default: false },
   category: { type: String, default: '' },
-  attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-}, { timestamps: true }); 
-
+  attendees: [{ type: String }],
+}, { timestamps: true });
 
 module.exports = mongoose.model('Note', noteSchema);

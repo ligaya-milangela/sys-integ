@@ -6,13 +6,18 @@ const session = require('cookie-session');
 const googleRoutes = require('./routes/googleRoutes');
 const notesRoutes = require('./routes/notes_route');
 const attendanceRoute = require('./routes/attendance_route');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 console.log(process.env.REACT_APP_API_URL);
 
+
+
+
+
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://sys-integ-backend.onrender.com', 'https://attendance-and-notes-system.netlify.app'],
+  origin: ['http://localhost:3000', 'https://sys-integ-backend.onrender.com', 'https://attendance-and-notes-system.netlify.app', ],
   credentials: true,
 }));
 
@@ -29,6 +34,7 @@ app.use(session({
 app.use('/auth', googleRoutes);  
 app.use('/api/notes', notesRoutes);
 app.use('/api/attendance', attendanceRoute);
+app.use('/api/auth', authRoutes);
 
 
 // MongoDB Connection

@@ -1,45 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Note = require('../models/notes_model');  
-const Attendance = require('../models/attendance_model');
-const User = require('../models/user_model'); // Import your User model
-// const { getAttendanceById } = require('./attendanceService');
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const note = await Note.findById(req.params.id).populate('attendees', 'name');;  
-    console.log(note)
-    if (!note) {
-      return res.status(404).json({ error: 'Note not found' });  
-    }
-    res.json(note);  
-  } catch (err) {
-    res.status(500).json({ error: err.message });  
-  }
-});
+const Note = require('../models/notes_model');
 
-router.get('/', async (req, res) => {
-  try {
-    const notes = await Note.find();  
-    res.json(notes);  
-  } catch (err) {
-    res.status(500).json({ error: err.message });  
-  }
-});
-
+// Create a new note with attendee names (no DB lookup)
 router.post('/', async (req, res) => {
   try {
-    const { title, content, isMinute, attendanceId } = req.body;
+    console.log('POST /api/notes called');
+    const { title, content, isMinute, attendees } = req.body;
 
-    let attendees = [];
+    console.log('Incoming Note Data:', req.body);
 
-    if (attendanceId) {
-      const attendanceRecord = await Attendance.findById(attendanceId);
-      if (!attendanceRecord) {
-        return res.status(404).json({ error: 'Attendance record not found' });
-      }
-
-      attendees = attendanceRecord.attendees; 
+    if (!Array.isArray(attendees)) {
+      return res.status(400).json({ error: 'Attendees must be an array of names' });
     }
 
     const newNote = new Note({
@@ -50,6 +22,8 @@ router.post('/', async (req, res) => {
     });
 
     const savedNote = await newNote.save();
+    console.log('Note saved with attendees:', savedNote.attendees);
+
     res.status(201).json(savedNote);
   } catch (err) {
     console.error('Error creating note:', err);
@@ -57,56 +31,25 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+
+// Get a single note by ID
+router.get('/:id', async (req, res) => {
   try {
-    const { attendees } = req.body;
-    console.log(attendees)
-    const { id } = req.params;
-    if (attendees && Array.isArray(attendees)) {
-      // Find users by name and get their ObjectIds
-      const users = await User.find({ _id: { $in: attendees } }, '_id');
-      const userIds = users.map(user => user._id);
+    console.log(`GET /api/notes/${req.params.id}`);
 
-      req.body.attendees = userIds;
-     
-    }
-    
-    const updatedNote = await Note.findByIdAndUpdate(id, req.body, { new: true });
+    const note = await Note.findById(req.params.id);
 
-    if (!updatedNote) {
+    if (!note) {
+      console.warn('Note not found');
       return res.status(404).json({ error: 'Note not found' });
     }
 
-    res.json(updatedNote);  
+    console.log('Returning note with attendees:', note);
+    res.status(200).json(note);
   } catch (err) {
-    console.error('Error updating note:', err);
-    res.status(500).json({ error: err.message });
+    console.error('Error fetching note:', err);
+    res.status(500).json({ error: 'Failed to fetch note' });
   }
 });
 
-
-router.patch('/:id/submit', async (req, res) => {
-  try {
-    const updatedNote = await Note.findByIdAndUpdate(req.params.id, { status: 'Submitted for Approval' }, { new: true });
-    if (!updatedNote) {
-      return res.status(404).json({ error: 'Note not found' });  
-    }
-    res.json(updatedNote);  
-  } catch (err) {
-    res.status(500).json({ error: err.message });  
-  }
-});
-
-router.delete('/:id', async (req, res) => {
-  try {
-    const note = await Note.findByIdAndDelete(req.params.id);  
-    if (!note) {
-      return res.status(404).json({ error: 'Note not found' });  
-    }
-    res.json({ message: 'Note deleted successfully' });  
-  } catch (err) {
-    res.status(500).json({ error: err.message });  
-  }
-});
-
-module.exports = router;  
+module.exports = router;

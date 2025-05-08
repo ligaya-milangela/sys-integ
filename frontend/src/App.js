@@ -8,13 +8,12 @@ import MinuteNoteDetail from './pages/meetings/minute_note_detail';
 import AttendanceForm from './pages/attendance/attendance_form';
 import AttendanceList from './pages/attendance/attendance_list';
 import AttendanceDetails from './pages/attendance/attendance_details';
-import NavBar from './components/nav-bar'; 
+import Login from './pages/auth/login';
+import Signup from './pages/auth/signup'; 
 function HomePage() {
   return (
     <div>
-      <h2>Google Meet</h2>
-      <GoogleMeetButton />
-      <NavBar/>
+      <Login/>
     </div>
   );
 }
@@ -22,7 +21,6 @@ function HomePage() {
 function App() {
   return (
     <div style={{ display: 'flex' }}>
-      <NavBar />
       <div style={{ flex: 1, padding: '20px', marginLeft: '200px' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -35,6 +33,8 @@ function App() {
           <Route path="/attendance/add" element={<AttendanceForm />} />
           <Route path="/attendance/create" element={<AttendanceForm />} />
           <Route path="/attendance/list" element={<AttendanceList />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
     </div>
