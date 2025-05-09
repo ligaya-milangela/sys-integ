@@ -144,6 +144,21 @@ const fetchMeetingNotes = async () => {
       ))}
     </ul>
   )}
+  <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/login`);
+              }}
+              style={{
+                backgroundColor: '#d3d3d3',
+                border: 'none',
+                borderRadius: '15px',
+                padding: '6px 15px',
+                cursor: 'pointer'
+              }}
+            >
+              Logout
+            </button>
 </div>
 
 
