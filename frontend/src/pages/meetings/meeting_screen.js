@@ -7,16 +7,17 @@ const MeetingScreen = () => {
   const [meetingNotes, setMeetingNotes] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+const fetchMeetingNotes = async () => {
+  try {
+    const response = await getNotes();
+    // Only show notes that are both minute notes AND approved
+    const meetingNotes = response.data.filter(note => note.isMinute === true && note.isApproved === true);
+    setMeetingNotes(meetingNotes);
+  } catch (err) {
+    console.error('Error fetching notes:', err);
+  }
+};
 
-  const fetchMeetingNotes = async () => {
-    try {
-      const response = await getNotes();
-      const meetingNotes = response.data.filter(note => note.isMinute === true);
-      setMeetingNotes(meetingNotes);
-    } catch (err) {
-      console.error('Error fetching notes:', err);
-    }
-  };
 
   useEffect(() => {
     fetchMeetingNotes();

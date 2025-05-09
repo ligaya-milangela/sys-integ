@@ -18,6 +18,15 @@ export const createNote = async (noteData) => {
     throw err; // Re-throw error for the calling function to handle
   }
 };
-export const updateNote = (id, updatedData) => axios.put(`${API_URL}/${id}`, updatedData);
+
+export const updateNote = async (id, updatedData) => {
+  try {
+    const response = await axios.put(`${API_URL}/${id}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating note:', error);
+    throw error;
+  }
+};
 export const deleteNote = (id) => axios.delete(`${API_URL}/${id}`);
 export const submitNoteForApproval = (id) => axios.patch(`${API_URL}/${id}/submit`);

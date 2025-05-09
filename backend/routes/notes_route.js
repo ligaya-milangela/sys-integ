@@ -10,15 +10,16 @@ router.post('/', async (req, res) => {
 
     console.log('Incoming Note Data:', req.body);
 
-    if (!Array.isArray(attendees)) {
-      return res.status(400).json({ error: 'Attendees must be an array of names' });
+    // Check if attendees is provided and is an array, or if it's null or undefined
+    if (attendees !== undefined && attendees !== null && !Array.isArray(attendees)) {
+      return res.status(400).json({ error: 'Attendees must be an array or null' });
     }
 
     const newNote = new Note({
       title,
       content,
       isMinute,
-      attendees,
+      attendees: attendees || null,  // If attendees is not provided, set it to null
     });
 
     const savedNote = await newNote.save();
@@ -28,6 +29,17 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.error('Error creating note:', err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    console.log('Update request body:', req.body); 
+    const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(note);
+  } catch (err) {
+    console.error('Error updating note:', err); 
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -50,6 +62,30 @@ router.get('/:id', async (req, res) => {
     console.error('Error fetching note:', err);
     res.status(500).json({ error: 'Failed to fetch note' });
   }
+});
+
+// Delete an attendance record by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const noteId = req.params.id;
+
+    const note = await Note.findByIdAndDelete(noteId);
+
+    if (!note) {
+      return res.status(404).json({ error: 'Attendance record not found.' });
+    }
+
+    res.status(200).json({ message: 'Attendance deleted successfully.' });
+  } catch (err) {
+    console.error('Error deleting attendance:', err);
+    res.status(500).json({ error: 'Failed to delete attendance' });
+  }
+});
+
+
+router.get('/', async (req, res) => {
+  const notes = await Note.find();
+  res.json(notes);
 });
 
 module.exports = router;

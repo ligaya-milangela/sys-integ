@@ -5,56 +5,26 @@ import { createNote } from '../../services/notesService';
 const MinuteCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [attendees, setAttendees] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [markAll, setMarkAll] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch('https://dummyjson.com/users')
-      .then((res) => res.json())
-      .then((data) => setUsers(data.users))
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-        alert('Failed to load users.');
-      });
-  }, []);
-
-  const handleAttendeeChange = (userId) => {
-    setAttendees((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
-    );
-  };
-
-  const handleMarkAll = () => {
-    if (markAll) {
-      setAttendees([]);
-    } else {
-      setAttendees(users.map((user) => user.id));
-    }
-    setMarkAll(!markAll);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Create note data without attendees
     const noteData = {
       title: title.trim(),
       content: content.trim(),
       isMinute: true,
-      attendees: attendees,
+      attendees: null, // Attendees is now removed and set to null
     };
 
     try {
       const response = await createNote(noteData);
       console.log('Note created:', response);
 
+      // Reset form after submission
       setTitle('');
       setContent('');
-      setAttendees([]);
-      setMarkAll(false);
 
       navigate('/meeting_screen');
     } catch (err) {
@@ -110,35 +80,6 @@ const MinuteCreate = () => {
                 resize: 'none',
               }}
             />
-          </div>
-
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Attendees:</label>
-            <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={markAll}
-                  onChange={handleMarkAll}
-                  style={{ marginRight: '8px' }}
-                />
-                Mark All
-              </label>
-            </div>
-            <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-              {users.map((user) => (
-                <label key={user.id} style={{ display: 'block', marginBottom: '5px' }}>
-                  <input
-                    type="checkbox"
-                    value={user.id}
-                    checked={attendees.includes(user.id)}
-                    onChange={() => handleAttendeeChange(user.id)}
-                    style={{ marginRight: '8px' }}
-                  />
-                  {user.firstName} {user.lastName}
-                </label>
-              ))}
-            </div>
           </div>
 
           <button
