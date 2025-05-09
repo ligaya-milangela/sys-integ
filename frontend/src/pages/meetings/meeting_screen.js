@@ -94,6 +94,22 @@ const fetchMeetingNotes = async () => {
           <p><strong>Created:</strong> <em>{formatDate(note.createdAt)}</em></p>
 
           <div style={{ marginTop: '1rem', display: 'flex', gap: '10px' }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/minute_view_detail/${note._id}`);
+                }}
+                style={{
+                  backgroundColor: '#d3d3d3',
+                  border: 'none',
+                  borderRadius: '15px',
+                  padding: '6px 15px',
+                  cursor: 'pointer'
+                }}
+              >
+                View
+            </button>
+
             <button
               onClick={(e) => {
                 e.stopPropagation();
