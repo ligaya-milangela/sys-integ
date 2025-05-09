@@ -1,37 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNote } from '../../services/notesService';
+import axios from 'axios';
 
 const MinuteCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Create note data without attendees
-    const noteData = {
-      title: title.trim(),
-      content: content.trim(),
-      isMinute: true,
-      attendees: null, // Attendees is now removed and set to null
-    };
-
-    try {
-      const response = await createNote(noteData);
-      console.log('Note created:', response);
-
-      // Reset form after submission
-      setTitle('');
-      setContent('');
-
-      navigate('/meeting_screen');
-    } catch (err) {
-      console.error('Error creating note:', err);
-      alert('Failed to create note. Check console for details.');
-    }
+  const noteData = {
+    title: title.trim(),
+    content: content.trim(),
+    isMinute: true,
+    attendees: null,
   };
+
+  try {
+    const createdNote = await createNote(noteData);
+
+    if (!createdNote || !createdNote._id) {
+      throw new Error('Note ID not returned from server');
+    }
+
+    // Now send to external API
+    await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
+      reference_id: createdNote._id,
+      title: createdNote.title,
+    });
+
+    // Clear and navigate
+    setTitle('');
+    setContent('');
+    navigate('/meeting_screen');
+
+  } catch (err) {
+    console.error('Error during note creation or ticket fetch:', err);
+    alert('Failed to create note or send to ticket API.');
+  }
+};
+
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
