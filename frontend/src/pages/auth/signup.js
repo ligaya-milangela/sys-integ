@@ -10,7 +10,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       // Send form data to backend for signup
-      await axios.post('/api/auth/signup', form);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, form);
       alert('Signup successful! Please login.');
       navigate('/login');
     } catch (err) {

@@ -9,7 +9,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/auth/login', form);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, form);
       localStorage.setItem('token', res.data.token);
       alert('Login successful!');
       navigate('/meeting_screen');
