@@ -1,39 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNote } from '../../services/notesService';
 
 const MinuteCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [attendees, setAttendees] = useState('');
+  const [attendees, setAttendees] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [markAll, setMarkAll] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('https://dummyjson.com/users')
+      .then((res) => res.json())
+      .then((data) => setUsers(data.users))
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+        alert('Failed to load users.');
+      });
+  }, []);
+
+  const handleAttendeeChange = (userId) => {
+    setAttendees((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  const handleMarkAll = () => {
+    if (markAll) {
+      setAttendees([]);
+    } else {
+      setAttendees(users.map((user) => user.id));
+    }
+    setMarkAll(!markAll);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Creating note...');
-
-    const attendeesArray = attendees
-      .split(',')
-      .map(name => name.trim())
-      .filter(name => name.length > 0);
 
     const noteData = {
       title: title.trim(),
       content: content.trim(),
       isMinute: true,
-      attendees: attendeesArray,
+      attendees: attendees,
     };
-
-    console.log('Note Data being sent:', noteData);
 
     try {
       const response = await createNote(noteData);
       console.log('Note created:', response);
 
-
       setTitle('');
       setContent('');
-      setAttendees('');
+      setAttendees([]);
+      setMarkAll(false);
 
       navigate('/meeting_screen');
     } catch (err) {
@@ -44,18 +65,20 @@ const MinuteCreate = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-      <div style={{
-        backgroundColor: '#e1effa',
-        padding: '30px',
-        borderRadius: '10px',
-        width: '400px',
-        border: '1px solid #ccc',
-        boxShadow: '0 0 5px rgba(0,0,0,0.1)'
-      }}>
+      <div
+        style={{
+          backgroundColor: '#e1effa',
+          padding: '30px',
+          borderRadius: '10px',
+          width: '400px',
+          border: '1px solid #ccc',
+          boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+        }}
+      >
         <h2 style={{ textAlign: 'center' }}>Create Meeting Note</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Title:</label><br />
+            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Title:</label>
             <input
               type="text"
               value={title}
@@ -66,16 +89,17 @@ const MinuteCreate = () => {
                 padding: '8px',
                 borderRadius: '4px',
                 border: '1px solid #ccc',
-                marginTop: '5px'
+                marginTop: '5px',
               }}
             />
           </div>
+
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Content:</label><br />
+            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Content:</label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={8}
+              rows={6}
               required
               style={{
                 width: '100%',
@@ -83,29 +107,40 @@ const MinuteCreate = () => {
                 borderRadius: '4px',
                 border: '1px solid #ccc',
                 marginTop: '5px',
-                resize: 'none'
+                resize: 'none',
               }}
             />
           </div>
+
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>
-              Attendees (comma-separated Usernames or User IDs):
-            </label><br />
-            <input
-              type="text"
-              value={attendees}
-              onChange={(e) => setAttendees(e.target.value)}
-              required
-              placeholder="e.g., Joy, Milangela"
-              style={{
-                width: '100%',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                marginTop: '5px'
-              }}
-            />
+            <label style={{ fontWeight: 'bold', fontSize: '16px' }}>Attendees:</label>
+            <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={markAll}
+                  onChange={handleMarkAll}
+                  style={{ marginRight: '8px' }}
+                />
+                Mark All
+              </label>
+            </div>
+            <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+              {users.map((user) => (
+                <label key={user.id} style={{ display: 'block', marginBottom: '5px' }}>
+                  <input
+                    type="checkbox"
+                    value={user.id}
+                    checked={attendees.includes(user.id)}
+                    onChange={() => handleAttendeeChange(user.id)}
+                    style={{ marginRight: '8px' }}
+                  />
+                  {user.firstName} {user.lastName}
+                </label>
+              ))}
+            </div>
           </div>
+
           <button
             type="submit"
             style={{
@@ -115,7 +150,7 @@ const MinuteCreate = () => {
               border: 'none',
               borderRadius: '20px',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
             }}
           >
             Save Note
