@@ -12,9 +12,24 @@ const app = express();
 console.log(process.env.REACT_APP_API_URL);
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://sys-integ-backend.onrender.com',
+  'https://attendance-and-notes-system.netlify.app',
+  'https://next-auro.vercel.app'
+];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://sys-integ-backend.onrender.com', 'https://attendance-and-notes-system.netlify.app', 'https://next-auro.vercel.app'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
 app.use(express.json());
 
