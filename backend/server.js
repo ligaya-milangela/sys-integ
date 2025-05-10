@@ -14,7 +14,6 @@ console.log(process.env.REACT_APP_API_URL);
 // Middleware
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://sys-integ-backend.onrender.com',
   'https://attendance-and-notes-system.netlify.app',
   'https://next-auro.vercel.app'
 ];
