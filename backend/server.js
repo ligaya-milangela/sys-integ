@@ -12,7 +12,8 @@ const app = express();
 console.log(process.env.REACT_APP_API_URL);
 
 // Middleware
-app.use(cors({
+
+const corsOptions = {
   origin: [
     'http://localhost:3000',
     'https://attendance-and-notes-system.netlify.app',
@@ -22,12 +23,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}));
-app.use(express.json());
+};
 
-app.options('*', cors());
+app.use(cors(corsOptions));
 
-// Session handling
+app.options('*', cors(corsOptions));
+
 app.use(session({
   name: 'session',
   keys: [process.env.SESSION_SECRET || 'default_key'],
