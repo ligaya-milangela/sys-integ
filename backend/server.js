@@ -13,10 +13,9 @@ console.log(process.env.REACT_APP_API_URL);
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://next-auro.vercel.app'],
+  origin: ['http://localhost:3000', 'https://sys-integ-backend.onrender.com', 'https://attendance-and-notes-system.netlify.app', 'https://next-auro.vercel.app'],
   credentials: true,
 }));
-//, 'https://sys-integ-backend.onrender.com', 'https://attendance-and-notes-system.netlify.app',
 app.use(express.json());
 
 // Session handling
