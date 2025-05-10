@@ -25,6 +25,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.options('*', cors());
+
 // Session handling
 app.use(session({
   name: 'session',
