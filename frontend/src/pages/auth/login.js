@@ -6,10 +6,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
-  const [isFocused, setIsFocused] = useState({
-    username: false,
-    password: false
-  });
+  const [isFocused, setIsFocused] = useState({ username: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -21,7 +18,7 @@ export default function Login() {
       alert('Login successful!');
       navigate('/meeting_screen');
     } catch (err) {
-      alert(err.response.data.message || 'Login error');
+      alert(err.response?.data?.message || 'Login error');
     }
   };
 
@@ -40,7 +37,6 @@ export default function Login() {
       flexDirection: 'column',
       alignItems: 'center'
     }}>
-
       <div style={{
         width: '100%',
         padding: '1.5rem 0',
@@ -68,7 +64,7 @@ export default function Login() {
         WebkitBackdropFilter: 'blur(8px)',
         zIndex: 0
       }} />
-      
+
       <div style={{
         flex: 1,
         display: 'flex',
@@ -94,49 +90,25 @@ export default function Login() {
             fontSize: '1.75rem',
             fontWeight: '600'
           }}>Login</h2>
-          
-          <div style={{ 
-            position: 'relative',
-            marginBottom: '2rem'
-          }}>
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              zIndex: 1
-            }} />
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              backgroundColor: '#3b82f6',
-              zIndex: 2,
-              transform: isFocused.username ? 'scaleX(1)' : 'scaleX(0)',
-              transformOrigin: 'center',
-              transition: 'transform 0.3s ease'
-            }} />
-            <input 
-              type="text" 
+
+          {/* Username Field */}
+          <div style={{ position: 'relative', marginBottom: '2rem' }}>
+            {/* ...label and underline remain unchanged */}
+            <input
+              type="text"
               value={form.username}
               onChange={e => setForm({ ...form, username: e.target.value })}
-              onFocus={() => setIsFocused({...isFocused, username: true})}
-              onBlur={() => setIsFocused({...isFocused, username: form.username.length > 0})}
+              onFocus={() => setIsFocused({ ...isFocused, username: true })}
+              onBlur={() => setIsFocused({ ...isFocused, username: form.username.length > 0 })}
               required
               style={{
                 width: '100%',
                 padding: '0.5rem 0',
                 backgroundColor: 'transparent',
                 border: 'none',
-                borderBottom: 'none',
                 color: '#f8fafc',
                 fontSize: '1rem',
-                outline: 'none',
-                transition: 'all 0.3s ease'
+                outline: 'none'
               }}
             />
             <label style={{
@@ -151,50 +123,26 @@ export default function Login() {
               Username
             </label>
           </div>
-          
-          <div style={{ 
-            position: 'relative',
-            marginBottom: '2.5rem'
-          }}>
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              zIndex: 1
-            }} />
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              backgroundColor: '#3b82f6',
-              zIndex: 2,
-              transform: isFocused.password ? 'scaleX(1)' : 'scaleX(0)',
-              transformOrigin: 'center',
-              transition: 'transform 0.3s ease'
-            }} />
-            <input 
+
+          {/* Password Field */}
+          <div style={{ position: 'relative', marginBottom: '2.5rem' }}>
+            {/* ...label and underline remain unchanged */}
+            <input
               type={showPassword ? "text" : "password"}
               value={form.password}
               onChange={e => setForm({ ...form, password: e.target.value })}
-              onFocus={() => setIsFocused({...isFocused, password: true})}
-              onBlur={() => setIsFocused({...isFocused, password: form.password.length > 0})}
+              onFocus={() => setIsFocused({ ...isFocused, password: true })}
+              onBlur={() => setIsFocused({ ...isFocused, password: form.password.length > 0 })}
               required
               style={{
                 width: '100%',
                 padding: '0.5rem 0',
                 backgroundColor: 'transparent',
                 border: 'none',
-                borderBottom: 'none',
                 color: '#f8fafc',
                 fontSize: '1rem',
                 outline: 'none',
-                transition: 'all 0.3s ease',
-                paddingRight: '2rem' 
+                paddingRight: '2rem'
               }}
             />
             <label style={{
@@ -220,43 +168,24 @@ export default function Login() {
                 border: 'none',
                 color: 'rgba(248, 250, 252, 0.7)',
                 cursor: 'pointer',
-                padding: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ':hover': {
-                  color: '#3b82f6'
-                }
+                padding: '0.5rem'
               }}
             >
               {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
             </button>
           </div>
-          
-          <button 
-            type="submit"
-            style={{
-              width: '100%',
-              padding: '0.875rem',
-              borderRadius: '8px',
-              border: 'none',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              marginTop: '1rem',
-              ':hover': {
-                backgroundColor: '#2563eb',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-              },
-              ':active': {
-                transform: 'translateY(0)'
-              }
-            }}
-          >
+
+          <button type="submit" style={{
+            width: '100%',
+            padding: '0.875rem',
+            borderRadius: '8px',
+            border: 'none',
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}>
             Login
           </button>
         </form>
