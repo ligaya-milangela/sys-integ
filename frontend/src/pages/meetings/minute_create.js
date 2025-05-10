@@ -32,7 +32,7 @@ const MinuteCreate = () => {
         throw new Error('Note ID not returned from server');
       }
 
-      await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/ticket/create/mnas`, {
         reference_id: createdNote._id,
         title: createdNote.title,
       });
