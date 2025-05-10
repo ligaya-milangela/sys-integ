@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const Department = require('../models/Department'); // Correct path to your Department model
+const Department = require('../models/Department'); 
 
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
