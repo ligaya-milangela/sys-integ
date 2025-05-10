@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import background from '../../assets/background.png';
-import { FiEye, FiEyeOff } from 'react-icons/fi'; // Import eye icons from react-icons
+import { FiEye, FiEyeOff } from 'react-icons/fi'; 
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -169,7 +169,7 @@ export default function Login() {
               fontSize: '1rem',
               outline: 'none',
               transition: 'all 0.3s ease',
-              paddingRight: '2rem' // Add space for the eye icon
+              paddingRight: '2rem' 
             }}
           />
           <label style={{

@@ -91,7 +91,7 @@ const MeetingScreen = () => {
             <button
               onClick={() => navigate('/minute_create')}
               style={{
-                backgroundColor: 'rgba(59, 130, 246, 0.9)',
+                backgroundColor: 'rgb(18, 52, 88)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -108,7 +108,7 @@ const MeetingScreen = () => {
                 }
               }}
             >
-              + Create New Minute
+              Create New Minute
             </button>
 
             <button

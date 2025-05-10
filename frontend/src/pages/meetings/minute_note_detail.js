@@ -13,14 +13,12 @@ const MinuteNoteDetail = () => {
   const [editedContent, setEditedContent] = useState('');
   const navigate = useNavigate();
 
-  // Fetch note and users
   useEffect(() => {
     const fetchNoteAndUsers = async () => {
       try {
         const noteResponse = await getNoteById(id);
         const usersResponse = await getAllUsers();
 
-        // Sort users alphabetically by first name
         const sortedUsers = usersResponse.data.users.sort((a, b) => 
           a.firstName.localeCompare(b.firstName)
         );
@@ -67,7 +65,7 @@ const MinuteNoteDetail = () => {
   };
 
   const handleAttendeeChange = (userId) => {
-    if (!isEditing) return; // Only allow changes in edit mode
+    if (!isEditing) return; 
     const idStr = String(userId);
     setSelectedAttendees((prev) =>
       prev.includes(idStr)
@@ -77,7 +75,7 @@ const MinuteNoteDetail = () => {
   };
 
   const handleMarkAll = () => {
-    if (!isEditing) return; // Only allow changes in edit mode
+    if (!isEditing) return; 
     if (selectedAttendees.length === users.length) {
       setSelectedAttendees([]);
     } else {
@@ -120,7 +118,6 @@ const MinuteNoteDetail = () => {
       backgroundPosition: 'center',
       overflow: 'hidden'
     }}>
-      {/* Blurred background overlay */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -132,7 +129,6 @@ const MinuteNoteDetail = () => {
         zIndex: 0
       }} />
       
-      {/* Content container */}
       <div style={{
         position: 'relative',
         height: 'calc(100vh - 4rem)',
@@ -144,7 +140,6 @@ const MinuteNoteDetail = () => {
         display: 'flex',
         flexDirection: 'column'
       }}>
-        {/* Back button - now properly sized */}
         <button
           onClick={handleBack}
           style={{
@@ -152,16 +147,16 @@ const MinuteNoteDetail = () => {
             color: 'rgba(248, 250, 252, 0.9)',
             border: '1px solid rgba(255,255,255,0.2)',
             borderRadius: '8px',
-            padding: '0.5rem 1rem', // Reduced padding
-            fontSize: '0.9rem', // Smaller font size
-            fontWeight: '500',
+            padding: '0.5rem 1rem',
+            fontSize: '1rem',
+            fontWeight: '600',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             marginBottom: '1.5rem',
-            display: 'inline-flex', // Changed to inline-flex
+            display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            width: 'fit-content', // Ensures button only takes needed space
+            width: 'fit-content',
             ':hover': {
               backgroundColor: 'rgba(51, 65, 85, 0.9)',
               transform: 'translateY(-2px)'
@@ -171,7 +166,6 @@ const MinuteNoteDetail = () => {
           ← Back to Meeting Notes
         </button>
 
-        {/* Header section */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -191,75 +185,96 @@ const MinuteNoteDetail = () => {
           </h1>
           
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              style={{
-                backgroundColor: isEditing ? 'rgba(51, 65, 85, 0.7)' : 'rgba(59, 130, 246, 0.9)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '0.75rem 1.5rem',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                ':hover': {
-                  backgroundColor: isEditing ? 'rgba(51, 65, 85, 0.9)' : '#2563eb',
-                  transform: 'translateY(-2px)'
-                }
-              }}
-            >
-              {isEditing ? 'Cancel Edit' : 'Edit'}
-            </button>
-            
-            {/* Changed Delete to Save Changes when editing */}
             {isEditing ? (
-              <button
-                onClick={handleSave}
-                style={{
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '0.75rem 1.5rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  ':hover': {
-                    backgroundColor: '#2563eb',
-                    transform: 'translateY(-2px)'
-                  }
-                }}
-              >
-                Save Changes
-              </button>
+              <>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  style={{
+                    backgroundColor: 'rgba(51, 65, 85, 0.7)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      backgroundColor: 'rgba(51, 65, 85, 0.9)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Cancel Edit
+                </button>
+                <button
+                  onClick={handleSave}
+                  style={{
+                    backgroundColor: 'rgb(18, 52, 88)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      backgroundColor: '#2563eb',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Save Changes
+                </button>
+              </>
             ) : (
-              <button
-                onClick={handleDelete}
-                style={{
-                  backgroundColor: 'rgba(220, 38, 38, 0.9)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '0.75rem 1.5rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  ':hover': {
-                    backgroundColor: 'rgba(185, 28, 28, 0.9)',
-                    transform: 'translateY(-2px)'
-                  }
-                }}
-              >
-                Delete
-              </button>
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  style={{
+                    backgroundColor: 'rgb(18, 52, 88)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      backgroundColor: '#2563eb',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={handleDelete}
+                  style={{
+                    backgroundColor: 'rgb(142, 22, 22)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      backgroundColor: 'rgb(142, 22, 22)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Delete
+                </button>
+              </>
             )}
           </div>
         </div>
 
-        {/* Main content area */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 350px',
@@ -267,7 +282,6 @@ const MinuteNoteDetail = () => {
           flex: 1,
           minHeight: 0
         }}>
-          {/* Left panel - Content */}
           <div style={{
             backgroundColor: 'rgba(51, 65, 85, 0.5)',
             padding: '2rem',
@@ -277,29 +291,17 @@ const MinuteNoteDetail = () => {
             flexDirection: 'column',
             overflow: 'hidden'
           }}>
-            <div style={{
-              position: 'relative',
+            <h2 style={{
+              color: '#f8fafc',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              marginTop: 0,
               marginBottom: '1.5rem',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
               paddingBottom: '0.75rem'
             }}>
-              <h2 style={{
-                color: '#f8fafc',
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                marginTop: 0,
-                marginBottom: 0
-              }}>
-                Meeting Minutes
-              </h2>
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '2px',
-                background: 'linear-gradient(90deg, #3b82f6, #2563eb)'
-              }} />
-            </div>
+              Meeting Minutes
+            </h2>
             
             {isEditing ? (
               <textarea
@@ -331,17 +333,19 @@ const MinuteNoteDetail = () => {
                 whiteSpace: 'pre-wrap',
                 overflowY: 'auto',
                 paddingRight: '0.5rem',
-                '::-webkit-scrollbar': {
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(148, 163, 184, 0.5) rgba(15, 23, 42, 0.3)',
+                '&::-webkit-scrollbar': {
                   width: '8px'
                 },
-                '::-webkit-scrollbar-track': {
+                '&::-webkit-scrollbar-track': {
                   backgroundColor: 'rgba(15, 23, 42, 0.3)',
                   borderRadius: '4px'
                 },
-                '::-webkit-scrollbar-thumb': {
+                '&::-webkit-scrollbar-thumb': {
                   backgroundColor: 'rgba(148, 163, 184, 0.5)',
                   borderRadius: '4px',
-                  ':hover': {
+                  '&:hover': {
                     backgroundColor: 'rgba(148, 163, 184, 0.7)'
                   }
                 }
@@ -351,7 +355,6 @@ const MinuteNoteDetail = () => {
             )}
           </div>
 
-          {/* Right panel - Attendees */}
           <div style={{ 
             backgroundColor: 'rgba(51, 65, 85, 0.5)',
             padding: '2rem',
@@ -361,45 +364,63 @@ const MinuteNoteDetail = () => {
             flexDirection: 'column',
             overflow: 'hidden'
           }}>
-            <div style={{
-              position: 'relative',
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
               marginBottom: '1.5rem',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
               paddingBottom: '0.75rem'
             }}>
               <h2 style={{ 
                 color: '#f8fafc',
                 fontSize: '1.25rem',
                 fontWeight: '600',
-                marginTop: 0,
-                marginBottom: 0
+                margin: 0
               }}>
                 Attendees
               </h2>
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '2px',
-                background: 'linear-gradient(90deg, #3b82f6, #2563eb)'
-              }} />
+              
+              {isEditing && (
+                <button
+                  onClick={handleMarkAll}
+                  style={{
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    color: '#93c5fd',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem 1rem',
+                    fontSize: '0.9rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      backgroundColor: 'rgba(59, 130, 246, 0.4)'
+                    }
+                  }}
+                >
+                  {selectedAttendees.length === users.length ? 'Unmark All' : 'Mark All'}
+                </button>
+              )}
             </div>
 
             <div style={{ 
               flex: 1,
               overflowY: 'auto',
               paddingRight: '0.5rem',
-              '::-webkit-scrollbar': {
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(148, 163, 184, 0.5) rgba(15, 23, 42, 0.3)',
+              '&::-webkit-scrollbar': {
                 width: '8px'
               },
-              '::-webkit-scrollbar-track': {
+              '&::-webkit-scrollbar-track': {
                 backgroundColor: 'rgba(15, 23, 42, 0.3)',
                 borderRadius: '4px'
               },
-              '::-webkit-scrollbar-thumb': {
+              '&::-webkit-scrollbar-thumb': {
                 backgroundColor: 'rgba(148, 163, 184, 0.5)',
                 borderRadius: '4px',
-                ':hover': {
+                '&:hover': {
                   backgroundColor: 'rgba(148, 163, 184, 0.7)'
                 }
               }
