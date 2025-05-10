@@ -16,7 +16,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/auth/login', form, { withCredentials: true });
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, form, { withCredentials: true });
       localStorage.setItem('token', res.data.token);
       alert('Login successful!');
       navigate('/meeting_screen');
