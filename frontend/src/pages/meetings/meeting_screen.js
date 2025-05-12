@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getNotes, deleteNote } from '../../services/notesService';
+import { getNotes, deleteNote, getTicketStatus } from '../../services/notesService';
 import background from '../../assets/background.png';
 
 const MeetingScreen = () => {
@@ -8,22 +8,51 @@ const MeetingScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fetch meeting notes along with ticket statuses
   const fetchMeetingNotes = async () => {
     try {
-      const response = await getNotes();
-      const meetingNotes = response.data.filter(note => note.isMinute === true && note.isApproved === true);
-      setMeetingNotes(meetingNotes);
+      const response = await getNotes();  // Fetch notes
+      const allNotes = response.data;
+
+      // Fetch ticket statuses for all notes
+      const notesWithStatus = await Promise.all(
+        allNotes.map(async (note) => {
+          try {
+            const res = await getTicketStatus(note._id);  // Fetch status for each note
+            console.log(res)  // Check the API response in the console
+
+            // Access ticket status from response data
+            const ticketStatus = res.data.ticket[0]?.status || 'Unavailable';  // Using optional chaining in case there's no status
+
+            return {
+              ...note,
+              ticketStatus,  // Save the status to note
+            };
+          } catch (err) {
+            console.error(`Error fetching ticket status for ${note._id}:`, err);
+            return {
+              ...note,
+              ticketStatus: 'Unavailable',  // If there's an error, mark as 'Unavailable'
+            };
+          }
+        })
+      );
+
+      // Filter notes to show only 'Approved' ticket status
+      const finalNotes = notesWithStatus.filter(note => note.ticketStatus === 'Approved');
+      setMeetingNotes(finalNotes);  // Update the state with the filtered notes
+
     } catch (err) {
       console.error('Error fetching notes:', err);
     }
   };
 
   useEffect(() => {
-    fetchMeetingNotes();
+    fetchMeetingNotes();  // Fetch notes whenever the location changes
   }, [location]);
 
   const handleNoteClick = (noteId) => {
-    navigate(`/minute_note_detail/${noteId}`);
+    navigate(`/minute_note_detail/${noteId}`);  // Navigate to note detail page
   };
 
   const formatDate = (isoString) => {
@@ -201,7 +230,7 @@ const MeetingScreen = () => {
                     borderRadius: '4px',
                     fontSize: '0.75rem'
                   }}>
-                    Approved
+                    {note.ticketStatus === 'Approved' ? 'Approved' : 'For Approval'}
                   </span>
                 </div>
               </div>

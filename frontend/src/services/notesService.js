@@ -30,3 +30,9 @@ export const updateNote = async (id, updatedData) => {
 };
 export const deleteNote = (id) => axios.delete(`${API_URL}/${id}`);
 export const submitNoteForApproval = (id) => axios.patch(`${API_URL}/${id}/submit`);
+
+export const getTicketStatus = async (referenceId) => {
+  return axios.post('https://express-auro.onrender.com/api/ticket/status', {
+    reference_id: referenceId,
+  });
+};
