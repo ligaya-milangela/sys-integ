@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import GoogleMeetButton from './components/GoogleMeetButton';
 import MeetingScreen from './pages/meetings/meeting_screen';
+import MeetingNotesList from './pages/meetings/meeting_notes_list';
 import MinuteNoteEdit from './pages/meetings/minute_note_edit';
 import MinuteCreate from './pages/meetings/minute_create';
 import MinuteNoteDetail from './pages/meetings/minute_note_detail';
@@ -39,6 +40,15 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+  path="/meeting_notes_list"
+  element={
+    <PrivateRoute>
+      <MeetingNotesList />
+    </PrivateRoute>
+  }
+/>
+
           <Route
             path="/minute_note_detail/:id"
             element={

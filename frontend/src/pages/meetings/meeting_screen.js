@@ -163,6 +163,10 @@ const MeetingScreen = () => {
           </div>
         </div>
 
+        <button onClick={() => navigate('/meeting_notes_list')}>
+      Minutes List
+    </button>
+
         {meetingNotes.length === 0 ? (
           <div style={{
             backgroundColor: 'rgba(51, 65, 85, 0.5)',
