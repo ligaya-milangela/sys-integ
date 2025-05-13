@@ -18,10 +18,13 @@ function MeetingNotesList() {
           allNotes.map(async (note) => {
             try {
               const statusRes = await getTicketStatus(note._id);
-              const ticketStatus = statusRes.data.ticket[0]?.status || 'Unavailable';
-              return { ...note, ticketStatus };
+              console.log(statusRes);
+              const ticketData = statusRes.data.ticket[0] || {};
+              const ticketStatus = ticketData.status || 'Unavailable';
+              const remarks = ticketData.remarks || ''; //for remarks once the field is available
+              return { ...note, ticketStatus, remarks };
             } catch (err) {
-              return { ...note, ticketStatus: 'Unavailable' };
+              return { ...note, ticketStatus: 'Unavailable', remarks: '' };
             }
           })
         );
@@ -76,6 +79,11 @@ function MeetingNotesList() {
               style={{ cursor: 'pointer', marginBottom: '10px' }}
             >
               <strong>{note.title}</strong> - <em>{note.ticketStatus}</em>
+              {note.remarks && (
+                <div style={{ fontStyle: 'italic', color: 'gray' }}>
+                  Remarks: {note.remarks}
+                </div>
+              )}
             </li>
           ))}
         </ul>
