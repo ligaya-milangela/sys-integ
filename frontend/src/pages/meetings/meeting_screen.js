@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getNotes, deleteNote, getTicketStatus } from '../../services/notesService';
-import background from '../../assets/background.png';
 
 const MeetingScreen = () => {
   const [meetingNotes, setMeetingNotes] = useState([]);
@@ -73,7 +72,7 @@ const MeetingScreen = () => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundImage: `url(${background})`,
+      backgroundColor: '#141414',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -81,6 +80,7 @@ const MeetingScreen = () => {
       padding: '2rem',
       boxSizing: 'border-box'
     }}>
+      <br></br><br></br>
       <div style={{
         position: 'fixed',
         top: 0,
@@ -91,7 +91,7 @@ const MeetingScreen = () => {
         WebkitBackdropFilter: 'blur(8px)',
         zIndex: 0
       }} />
-      
+
       <div style={{
         position: 'relative',
         maxWidth: '1200px',
@@ -106,21 +106,26 @@ const MeetingScreen = () => {
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
-          <h1 style={{
-            color: '#f8fafc',
-            fontSize: '2rem',
-            fontWeight: '600',
+          <h1 className="wave-text" style={{
             margin: 0,
-            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            fontWeight: '600',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            display: 'flex', // Ensure the spans are aligned properly
+            gap: '0.2rem', // Add spacing between letters
+            color: 'white',
           }}>
-            Approved Meeting Minutes
+            {'Approved Meeting Minutes'.split('').map((char, index) => (
+              <span key={index} style={{ animationDelay: `${index * 0.2}s` }}>
+                {char === ' ' ? '\u00A0' : char} {/* Handle spaces */}
+              </span>
+            ))}
           </h1>
-          
+
           <div style={{ display: 'flex', gap: '1rem' }}>
             <button
               onClick={() => navigate('/minute_create')}
               style={{
-                backgroundColor: 'rgb(18, 52, 88)',
+                backgroundColor: '#4973ff',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -162,11 +167,32 @@ const MeetingScreen = () => {
             </button>
           </div>
         </div>
-
-        <button onClick={() => navigate('/meeting_notes_list')}>
-      Minutes List
-    </button>
-
+<br></br>
+<br></br>
+        <button
+          onClick={() => navigate('/meeting_notes_list')}
+          style={{
+            backgroundColor: '#4973ff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '0.75rem 1.5rem',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+            ':hover': {
+              backgroundColor: '#2563eb',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+            },
+          }}
+        >
+          Minutes List
+        </button>
+        <br></br>
+        <br></br>
         {meetingNotes.length === 0 ? (
           <div style={{
             backgroundColor: 'rgba(51, 65, 85, 0.5)',
@@ -189,21 +215,7 @@ const MeetingScreen = () => {
               <div
                 key={note._id}
                 onClick={() => handleNoteClick(note._id)}
-                style={{
-                  backgroundColor: 'rgba(51, 65, 85, 0.5)',
-                  borderRadius: '12px',
-                  padding: '1.5rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                  ':hover': {
-                    transform: 'translateY(-5px)',
-                    borderColor: 'rgba(59, 130, 246, 0.5)',
-                    boxShadow: '0 8px 15px rgba(0,0,0,0.2)'
-                  }
-                }}
+                className="note-card" // Apply the CSS class here
               >
                 <h3 style={{
                   color: '#f8fafc',
@@ -217,7 +229,7 @@ const MeetingScreen = () => {
                 }}>
                   {note.title}
                 </h3>
-                
+
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getNoteById, updateNote, deleteNote } from '../../services/notesService';
 import { getAllUsers } from '../../services/userService';
-import background from '../../assets/background.png';
 
 const MinuteNoteDetail = () => {
   const { id } = useParams();
@@ -19,7 +18,7 @@ const MinuteNoteDetail = () => {
         const noteResponse = await getNoteById(id);
         const usersResponse = await getAllUsers();
 
-        const sortedUsers = usersResponse.data.users.sort((a, b) => 
+        const sortedUsers = usersResponse.data.users.sort((a, b) =>
           a.firstName.localeCompare(b.firstName)
         );
 
@@ -41,9 +40,9 @@ const MinuteNoteDetail = () => {
 
   const handleSave = async () => {
     try {
-      await updateNote(id, { 
+      await updateNote(id, {
         content: editedContent,
-        attendees: selectedAttendees 
+        attendees: selectedAttendees
       });
       const updatedNote = await getNoteById(id);
       setNote(updatedNote.data);
@@ -65,7 +64,7 @@ const MinuteNoteDetail = () => {
   };
 
   const handleAttendeeChange = (userId) => {
-    if (!isEditing) return; 
+    if (!isEditing) return;
     const idStr = String(userId);
     setSelectedAttendees((prev) =>
       prev.includes(idStr)
@@ -75,7 +74,7 @@ const MinuteNoteDetail = () => {
   };
 
   const handleMarkAll = () => {
-    if (!isEditing) return; 
+    if (!isEditing) return;
     if (selectedAttendees.length === users.length) {
       setSelectedAttendees([]);
     } else {
@@ -94,15 +93,12 @@ const MinuteNoteDetail = () => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundImage: `url(${background})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      backgroundColor: '#141414',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      color: '#f8fafc'
     }}>
-      Loading...
+      <div className="loader"></div>
     </div>
   );
 
@@ -113,7 +109,7 @@ const MinuteNoteDetail = () => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      backgroundImage: `url(${background})`,
+      backgroundColor: '#141414',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       overflow: 'hidden'
@@ -128,7 +124,7 @@ const MinuteNoteDetail = () => {
         WebkitBackdropFilter: 'blur(8px)',
         zIndex: 0
       }} />
-      
+
       <div style={{
         position: 'relative',
         height: 'calc(100vh - 4rem)',
@@ -166,15 +162,15 @@ const MinuteNoteDetail = () => {
           ← Back to Meeting Notes
         </button>
 
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '2rem',
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
-          <h1 style={{ 
+          <h1 style={{
             color: '#f8fafc',
             fontSize: '1.8rem',
             fontWeight: '600',
@@ -183,7 +179,7 @@ const MinuteNoteDetail = () => {
           }}>
             {note.title}
           </h1>
-          
+
           <div style={{ display: 'flex', gap: '1rem' }}>
             {isEditing ? (
               <>
@@ -283,7 +279,7 @@ const MinuteNoteDetail = () => {
           minHeight: 0
         }}>
           <div style={{
-            backgroundColor: 'rgba(51, 65, 85, 0.5)',
+            backgroundColor: 'transparent',
             padding: '2rem',
             borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.1)',
@@ -302,7 +298,7 @@ const MinuteNoteDetail = () => {
             }}>
               Meeting Minutes
             </h2>
-            
+
             {isEditing ? (
               <textarea
                 value={editedContent}
@@ -355,7 +351,7 @@ const MinuteNoteDetail = () => {
             )}
           </div>
 
-          <div style={{ 
+          <div style={{
             backgroundColor: 'rgba(51, 65, 85, 0.5)',
             padding: '2rem',
             borderRadius: '12px',
@@ -364,15 +360,15 @@ const MinuteNoteDetail = () => {
             flexDirection: 'column',
             overflow: 'hidden'
           }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: '1.5rem',
               borderBottom: '1px solid rgba(255,255,255,0.1)',
               paddingBottom: '0.75rem'
             }}>
-              <h2 style={{ 
+              <h2 style={{
                 color: '#f8fafc',
                 fontSize: '1.25rem',
                 fontWeight: '600',
@@ -380,7 +376,7 @@ const MinuteNoteDetail = () => {
               }}>
                 Attendees
               </h2>
-              
+
               {isEditing && (
                 <button
                   onClick={handleMarkAll}
@@ -404,7 +400,7 @@ const MinuteNoteDetail = () => {
               )}
             </div>
 
-            <div style={{ 
+            <div style={{
               flex: 1,
               overflowY: 'auto',
               paddingRight: '0.5rem',
@@ -425,28 +421,28 @@ const MinuteNoteDetail = () => {
                 }
               }
             }}>
-              <ul style={{ 
-                listStyleType: 'none', 
+              <ul style={{
+                listStyleType: 'none',
                 padding: 0,
                 display: 'grid',
                 gap: '0.5rem'
               }}>
                 {users.map((user) => (
-                  <li 
-                    key={user.id} 
+                  <li
+                    key={user.id}
                     onClick={() => handleAttendeeChange(user.id)}
-                    style={{ 
+                    style={{
                       display: 'flex',
                       alignItems: 'center',
                       padding: '0.75rem',
                       borderRadius: '8px',
-                      backgroundColor: selectedAttendees.includes(String(user.id)) 
-                        ? 'rgba(59, 130, 246, 0.2)' 
+                      backgroundColor: selectedAttendees.includes(String(user.id))
+                        ? 'rgba(59, 130, 246, 0.2)'
                         : 'rgba(255,255,255,0.05)',
                       transition: 'all 0.2s ease',
                       cursor: isEditing ? 'pointer' : 'default',
                       ':hover': {
-                        backgroundColor: isEditing 
+                        backgroundColor: isEditing
                           ? selectedAttendees.includes(String(user.id))
                             ? 'rgba(59, 130, 246, 0.3)'
                             : 'rgba(255,255,255,0.1)'
@@ -458,7 +454,7 @@ const MinuteNoteDetail = () => {
                       type="checkbox"
                       checked={selectedAttendees.includes(String(user.id))}
                       onChange={() => handleAttendeeChange(user.id)}
-                      style={{ 
+                      style={{
                         marginRight: '1rem',
                         width: '18px',
                         height: '18px',
@@ -468,9 +464,9 @@ const MinuteNoteDetail = () => {
                         pointerEvents: isEditing ? 'auto' : 'none'
                       }}
                     />
-                    <span style={{ 
-                      color: selectedAttendees.includes(String(user.id)) 
-                        ? '#f8fafc' 
+                    <span style={{
+                      color: selectedAttendees.includes(String(user.id))
+                        ? '#f8fafc'
                         : 'rgba(248, 250, 252, 0.7)',
                       fontWeight: selectedAttendees.includes(String(user.id)) ? '500' : 'normal'
                     }}>
