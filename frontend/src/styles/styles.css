@@ -1,0 +1,197 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+section .wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #4973ff;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  transition: 0.5s;
+}
+
+section .wave span {
+  content: "";
+  position: absolute;
+  width: 325vh;
+  height: 325vh;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  background: #000;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  font-size: 4em;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 5%;
+}
+
+.text-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-text {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  color: white;
+  font-size: 40px;
+  font-weight: 600;
+  text-align: left;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+section .wave span:nth-child(1) {
+  border-radius: 45%;
+  background: rgba(20, 20, 20, 1);
+  animation: animate 5s linear infinite;
+}
+
+section .wave span:nth-child(2) {
+  border-radius: 40%;
+  background: rgba(20, 20, 20, 0.5);
+  animation: animate 10s linear infinite;
+}
+
+section .wave span:nth-child(3) {
+  border-radius: 42.5%;
+  background: rgba(20, 20, 20, 0.5);
+  animation: animate 15s linear infinite;
+}
+
+/* minute screen */
+
+.wave-text span {
+  display: inline-block;
+  font-size: 2rem; /* Adjust size to match your design */
+  animation: wave 2s ease-in-out infinite;
+}
+
+.note-card {
+  background-color: transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-card:hover {
+  transform: scale(1.05); /* Slightly scale up the card */
+  border-color: rgba(59, 130, 246, 0.7); /* Make the border more prominent */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Add a deeper shadow */
+  background-color: rgba(59, 130, 246, 0.1); /* Add a subtle background color */
+  transition: all 0.3s ease; /* Smooth transition for the hover effect */
+}
+
+/*minute_note_details*/
+
+.loader {
+  position: relative;
+  height: 40px;
+  width: 6px;
+  color: #FFF;
+  animation: paddles 0.75s ease-out infinite;
+}
+
+.loader:before {
+  content: "";
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 15px;
+  width: 12px;
+  height: 12px;
+  background-color: #4973ff;
+  border-radius: 50%;
+  animation: ballbounce 0.6s ease-out infinite;
+}
+
+
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -75%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -75%) rotate(360deg);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes paddles {
+  0% { box-shadow: -25px -10px, 25px 10px; }
+  50% { box-shadow: -25px 8px, 25px -10px; }
+  100% { box-shadow: -25px -10px, 25px 10px; }
+}
+
+@keyframes ballbounce {
+  0% { transform: translateX(-20px) scale(1, 1.2); }
+  25% { transform: scale(1.2, 1); }
+  50% { transform: translateX(15px) scale(1, 1.2); }
+  75% { transform: scale(1.2, 1); }
+  100% { transform: translateX(-20px); }
+}
