@@ -8,6 +8,7 @@ const noteSchema = new mongoose.Schema({
   isApproved: { type: Boolean, default: false }, 
   category: { type: String, default: '' },
   attendees: [{ type: String }],
+  department: [{type: String}],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Note', noteSchema);

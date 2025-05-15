@@ -23,6 +23,7 @@ const MinuteCreate = () => {
       content: form.content.trim(),
       isMinute: true,
       attendees: null,
+      department: 'Meeting Minute and Attendance System',
     };
 
     try {
