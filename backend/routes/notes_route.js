@@ -6,7 +6,7 @@ const Note = require('../models/notes_model');
 router.post('/', async (req, res) => {
   try {
     console.log('POST /api/notes called');
-    const { title, content, isMinute, attendees } = req.body;
+    const { title, content, isMinute, attendees, department } = req.body;
 
     console.log('Incoming Note Data:', req.body);
 
@@ -19,7 +19,8 @@ router.post('/', async (req, res) => {
       title,
       content,
       isMinute,
-      attendees: attendees || null,  // If attendees is not provided, set it to null
+      attendees: attendees || null,
+      department: department || 'Meeting Minute and Attendance System', 
     });
 
     const savedNote = await newNote.save();
