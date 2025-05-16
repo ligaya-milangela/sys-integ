@@ -1,0 +1,413 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+}
+
+/* Customize scrollbar appearance */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.7);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(51, 65, 85, 0.9);
+}
+
+.minute-note-detail-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.5) rgba(15, 23, 42, 0.3);
+}
+
+.minute-note-detail-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.minute-note-detail-scroll::-webkit-scrollbar-track {
+  background-color: rgba(15, 23, 42, 0.3);
+  border-radius: 4px;
+}
+
+.minute-note-detail-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.5);
+  border-radius: 4px;
+}
+
+.minute-note-detail-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.7);
+}
+
+section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+section .wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #4973ff;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  transition: 0.5s;
+}
+
+section .wave span {
+  content: "";
+  position: absolute;
+  width: 325vh;
+  height: 325vh;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  background: #000;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  font-size: 4em;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 5%;
+}
+
+.text-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-text {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  color: white;
+  font-size: 40px;
+  font-weight: 600;
+  text-align: left;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+section .wave span:nth-child(1) {
+  border-radius: 45%;
+  background: rgba(20, 20, 20, 1);
+  animation: animate 5s linear infinite;
+}
+
+section .wave span:nth-child(2) {
+  border-radius: 40%;
+  background: rgba(20, 20, 20, 0.5);
+  animation: animate 10s linear infinite;
+}
+
+section .wave span:nth-child(3) {
+  border-radius: 42.5%;
+  background: rgba(20, 20, 20, 0.5);
+  animation: animate 15s linear infinite;
+}
+
+/* minute screen */
+
+.wave-text span {
+  display: inline-block;
+  font-size: 2rem; 
+  animation: wave 2s ease-in-out infinite;
+}
+
+.note-card {
+  background-color: transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-card:hover {
+  transform: scale(1.05); 
+  border-color: rgba(59, 130, 246, 0.7); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
+  background-color: rgba(59, 130, 246, 0.1); 
+  transition: all 0.3s ease; 
+}
+
+
+.loader {
+  position: relative;
+  height: 40px;
+  width: 6px;
+  color: #FFF;
+  animation: paddles 0.75s ease-out infinite;
+}
+
+.loader:before {
+  content: "";
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 15px;
+  width: 12px;
+  height: 12px;
+  background-color: #4973ff;
+  border-radius: 50%;
+  animation: ballbounce 0.6s ease-out infinite;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 7px;
+  border: none;
+  background: #4973ff;
+  color: white;
+  font-family: inherit; 
+  font-weight: 600; 
+  text-align: center;
+  font-size: 1rem; 
+  box-shadow: 0px 0px 5px -11px #4973ff;
+  width: 12em; 
+  padding: 0.5rem 1rem;
+  transition: all 0.4s;
+  cursor: pointer;
+  white-space: nowrap; 
+}
+
+.button:hover {
+  background: #2563eb; 
+  box-shadow: 0px 0px 5px -11px #2563eb;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.4s;
+  white-space: nowrap; 
+}
+
+.button span:after {
+  content: ' New Minute';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.4s;
+  white-space: nowrap; 
+}
+
+.button:hover span {
+  padding-right: 6.30em;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+/* Refresh button styles */
+.refresh-btn {
+  color: white;
+  background-color: #4973ff; 
+  font-family: inherit; 
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  height: 2.5rem; 
+  padding-left: 1rem;
+  padding-right: 1rem;
+  cursor: pointer;
+  text-align: center;
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background-color: #2563eb; 
+}
+
+.refresh-btn svg {
+  display: inline;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.5rem;
+  color: white;
+}
+
+
+.status-btn {
+  background-color: #4973ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.status-btn:hover {
+  background: #2563eb;
+  box-shadow: 0px 0px 5px -11px #2563eb;
+}
+
+/* Logout button styles */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 12px; 
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgba(51, 65, 85, 0.7); 
+}
+
+.logout-btn .sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn .sign svg {
+  width: 17px;
+}
+
+.logout-btn .sign svg path {
+  fill: rgba(248, 250, 252, 0.9); 
+}
+
+.logout-btn .text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: rgba(248, 250, 252, 0.9); 
+  font-size: 1rem; 
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+
+.logout-btn:hover {
+  width: 125px;
+  border-radius: 12px; 
+  transition-duration: 0.3s;
+}
+
+.logout-btn:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+
+.logout-btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+
+.logout-btn:active {
+  transform: translate(2px, 2px);
+}
+
+.spin {
+  animation: spin_357 0.5s linear;
+}
+
+@keyframes spin_357 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -75%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -75%) rotate(360deg);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes paddles {
+  0% { box-shadow: -25px -10px, 25px 10px; }
+  50% { box-shadow: -25px 8px, 25px -10px; }
+  100% { box-shadow: -25px -10px, 25px 10px; }
+}
+
+@keyframes ballbounce {
+  0% { transform: translateX(-20px) scale(1, 1.2); }
+  25% { transform: scale(1.2, 1); }
+  50% { transform: translateX(15px) scale(1, 1.2); }
+  75% { transform: scale(1.2, 1); }
+  100% { transform: translateX(-20px); }
+}
