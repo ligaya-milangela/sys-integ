@@ -10,6 +10,8 @@ const MinuteNoteDetail = () => {
   const [selectedAttendees, setSelectedAttendees] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
+  const [originalAttendees, setOriginalAttendees] = useState([]);
+  const [originalContent, setOriginalContent] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,11 +26,13 @@ const MinuteNoteDetail = () => {
 
         setNote(noteResponse.data);
         setEditedContent(noteResponse.data.content);
+        setOriginalContent(noteResponse.data.content); // Save original content
         setUsers(sortedUsers);
 
         if (noteResponse.data.attendees) {
           const attendeeIds = noteResponse.data.attendees.map(String);
           setSelectedAttendees(attendeeIds);
+          setOriginalAttendees(attendeeIds); // Save original attendees
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -86,6 +90,18 @@ const MinuteNoteDetail = () => {
     navigate('/meeting_screen');
   };
 
+  const handleEdit = () => {
+    setOriginalAttendees(selectedAttendees);
+    setOriginalContent(editedContent);
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setSelectedAttendees(originalAttendees);
+    setEditedContent(originalContent);
+    setIsEditing(false);
+  };
+
   if (!note || !users.length) return (
     <div style={{
       position: 'fixed',
@@ -141,7 +157,7 @@ const MinuteNoteDetail = () => {
           style={{
             backgroundColor: 'rgba(51, 65, 85, 0.7)',
             color: 'rgba(248, 250, 252, 0.9)',
-            border: '1px solid rgba(255,255,255,0.2)',
+            border: 'none',
             borderRadius: '8px',
             padding: '0.5rem 1rem',
             fontSize: '1rem',
@@ -159,7 +175,7 @@ const MinuteNoteDetail = () => {
             }
           }}
         >
-          ← Back to Meeting Notes
+          ←  Return
         </button>
 
         <div style={{
@@ -170,21 +186,26 @@ const MinuteNoteDetail = () => {
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
-          <h1 style={{
-            color: '#f8fafc',
-            fontSize: '1.8rem',
-            fontWeight: '600',
+          <h1 className="wave-text" style={{
             margin: 0,
-            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            fontWeight: '600',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            display: 'flex',
+            gap: '0.2rem',
+            color: 'white',
           }}>
-            {note.title}
+            {note.title.split('').map((char, index) => (
+              <span key={index} style={{ animationDelay: `${index * 0.2}s` }}>
+                {char === ' ' ? '\u00A0' : char} {/* Handle spaces */}
+              </span>
+            ))}
           </h1>
 
           <div style={{ display: 'flex', gap: '1rem' }}>
             {isEditing ? (
               <>
                 <button
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleCancelEdit}
                   style={{
                     backgroundColor: 'rgba(51, 65, 85, 0.7)',
                     color: 'white',
@@ -206,7 +227,7 @@ const MinuteNoteDetail = () => {
                 <button
                   onClick={handleSave}
                   style={{
-                    backgroundColor: 'rgb(18, 52, 88)',
+                    backgroundColor: '#4973ff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -227,9 +248,9 @@ const MinuteNoteDetail = () => {
             ) : (
               <>
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={handleEdit}
                   style={{
-                    backgroundColor: 'rgb(18, 52, 88)',
+                    backgroundColor: '#4973ff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -322,37 +343,23 @@ const MinuteNoteDetail = () => {
                 }}
               />
             ) : (
-              <div style={{
-                flex: 1,
-                color: 'rgba(248, 250, 252, 0.9)',
-                lineHeight: '1.6',
-                whiteSpace: 'pre-wrap',
-                overflowY: 'auto',
-                paddingRight: '0.5rem',
-                scrollbarWidth: 'thin',
-                scrollbarColor: 'rgba(148, 163, 184, 0.5) rgba(15, 23, 42, 0.3)',
-                '&::-webkit-scrollbar': {
-                  width: '8px'
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: 'rgba(15, 23, 42, 0.3)',
-                  borderRadius: '4px'
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: 'rgba(148, 163, 184, 0.5)',
-                  borderRadius: '4px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(148, 163, 184, 0.7)'
-                  }
-                }
-              }}>
+              <div
+                className="minute-note-detail-scroll"
+                style={{
+                  flex: 1,
+                  color: 'rgba(248, 250, 252, 0.9)',
+                  lineHeight: '1.6',
+                  whiteSpace: 'pre-wrap',
+                  paddingRight: '0.5rem',
+                }}
+              >
                 {note.content}
               </div>
             )}
           </div>
 
           <div style={{
-            backgroundColor: 'rgba(51, 65, 85, 0.5)',
+            backgroundColor: 'transparent',
             padding: '2rem',
             borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.1)',
@@ -395,86 +402,117 @@ const MinuteNoteDetail = () => {
                     }
                   }}
                 >
-                  {selectedAttendees.length === users.length ? 'Unmark All' : 'Mark All'}
+                  {selectedAttendees.length === users.length ? 'Unselect All' : 'Select All'}
                 </button>
               )}
             </div>
 
-            <div style={{
-              flex: 1,
-              overflowY: 'auto',
-              paddingRight: '0.5rem',
-              scrollbarWidth: 'thin',
-              scrollbarColor: 'rgba(148, 163, 184, 0.5) rgba(15, 23, 42, 0.3)',
-              '&::-webkit-scrollbar': {
-                width: '8px'
-              },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: 'rgba(15, 23, 42, 0.3)',
-                borderRadius: '4px'
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: 'rgba(148, 163, 184, 0.5)',
-                borderRadius: '4px',
-                '&:hover': {
-                  backgroundColor: 'rgba(148, 163, 184, 0.7)'
-                }
-              }
-            }}>
-              <ul style={{
-                listStyleType: 'none',
-                padding: 0,
-                display: 'grid',
-                gap: '0.5rem'
+            <div
+              className="minute-note-detail-scroll"
+              style={{
+                flex: 1,
+                paddingRight: '0.5rem',
+              }}
+            >
+              {/* Selected Attendees */}
+              <div style={{
+                marginBottom: '1rem',
+                padding: '1rem',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.3)'
               }}>
-                {users.map((user) => (
-                  <li
-                    key={user.id}
-                    onClick={() => handleAttendeeChange(user.id)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      backgroundColor: selectedAttendees.includes(String(user.id))
-                        ? 'rgba(59, 130, 246, 0.2)'
-                        : 'rgba(255,255,255,0.05)',
-                      transition: 'all 0.2s ease',
-                      cursor: isEditing ? 'pointer' : 'default',
-                      ':hover': {
-                        backgroundColor: isEditing
-                          ? selectedAttendees.includes(String(user.id))
-                            ? 'rgba(59, 130, 246, 0.3)'
-                            : 'rgba(255,255,255,0.1)'
-                          : undefined
-                      }
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedAttendees.includes(String(user.id))}
-                      onChange={() => handleAttendeeChange(user.id)}
+                <h3 style={{
+                  color: '#f8fafc',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem'
+                }}>
+                  Selected Attendees
+                </h3>
+                <ul style={{
+                  listStyleType: 'none',
+                  padding: 0,
+                  display: 'grid',
+                  gap: '0.5rem'
+                }}>
+                  {users.filter(user => selectedAttendees.includes(String(user.id))).map(user => (
+                    <li
+                      key={user.id}
+                      onClick={() => handleAttendeeChange(user.id)}
                       style={{
-                        marginRight: '1rem',
-                        width: '18px',
-                        height: '18px',
-                        cursor: isEditing ? 'pointer' : 'default',
-                        accentColor: '#3b82f6',
-                        opacity: isEditing ? 1 : 0.5,
-                        pointerEvents: isEditing ? 'auto' : 'none'
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        transition: 'all 0.2s ease',
+                        cursor: isEditing ? 'pointer' : 'default'
                       }}
-                    />
-                    <span style={{
-                      color: selectedAttendees.includes(String(user.id))
-                        ? '#f8fafc'
-                        : 'rgba(248, 250, 252, 0.7)',
-                      fontWeight: selectedAttendees.includes(String(user.id)) ? '500' : 'normal'
-                    }}>
-                      {user.firstName} {user.lastName}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                    >
+                      <span style={{
+                        color: '#f8fafc',
+                        fontWeight: '500'
+                      }}>
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Divider */}
+              <div style={{
+                height: '1px',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                margin: '1rem 0'
+              }}></div>
+
+              {/* Unselected Attendees */}
+              <div style={{
+                padding: '1rem',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}>
+                <h3 style={{
+                  color: '#f8fafc',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem'
+                }}>
+                  Unselected Attendees
+                </h3>
+                <ul style={{
+                  listStyleType: 'none',
+                  padding: 0,
+                  display: 'grid',
+                  gap: '0.5rem'
+                }}>
+                  {users.filter(user => !selectedAttendees.includes(String(user.id))).map(user => (
+                    <li
+                      key={user.id}
+                      onClick={() => handleAttendeeChange(user.id)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        transition: 'all 0.2s ease',
+                        cursor: isEditing ? 'pointer' : 'default'
+                      }}
+                    >
+                      <span style={{
+                        color: 'rgba(248, 250, 252, 0.7)',
+                        fontWeight: 'normal'
+                      }}>
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
