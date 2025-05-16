@@ -17,7 +17,8 @@ const allowedOrigins = [
   'https://attendance-and-notes-system.netlify.app',
   'https://next-auro.vercel.app',
   'https://itmc321announcements.onrender.com',
-  'http://localhost:8000'
+  'http://localhost:8000',
+  'http://localhost:5173',
 ];
 
 app.use(cors({
