@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getNoteById, updateNote, deleteNote } from '../../services/notesService';
+import Swal from 'sweetalert2';
 import { getAllUsers } from '../../services/userService';
 
 const MinuteNoteDetail = () => {
@@ -54,12 +55,35 @@ const MinuteNoteDetail = () => {
     } catch (err) {
       console.error('Error saving note:', err);
     }
+    Swal.fire({
+          icon: 'success',
+          title: 'Note Saved!',
+          text: 'Meeting note successfully saved.',
+          confirmButtonColor: '#3085d6'
+        });
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this note?")) {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to delete this note?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (result.isConfirmed) {
       try {
         await deleteNote(id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Meeting note deleted successfully.',
+          confirmButtonColor: '#3085d6'
+        });
         navigate('/meeting_screen');
       } catch (err) {
         console.error('Error deleting note:', err);

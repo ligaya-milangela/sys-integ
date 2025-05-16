@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getNotes, getTicketStatus, createNote } from '../../services/notesService';
+import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const MeetingScreen = () => {
@@ -73,32 +74,54 @@ const MeetingScreen = () => {
   };
 
   const handleCreateSubmit = async (e) => {
-    e.preventDefault();
-    setCreateLoading(true);
-    const noteData = {
-      title: createForm.title.trim(),
-      content: createForm.content.trim(),
-      isMinute: true,
-      attendees: null,
-    };
-    try {
-      const createdNote = await createNote(noteData);
-      if (!createdNote || !createdNote._id) {
-        throw new Error('Note ID not returned from server');
-      }
-      await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
-        reference_id: createdNote._id,
-        title: createdNote.title,
-      });
-      setCreateForm({ title: '', content: '' });
-      setShowCreateModal(false);
-      setCreateLoading(false);
-      fetchMeetingNotes();
-    } catch (err) {
-      setCreateLoading(false);
-      alert(err.response?.data?.message || 'Failed to create note or send to ticket API.');
-    }
+  e.preventDefault();
+  setCreateLoading(true);
+
+  const noteData = {
+    title: createForm.title.trim(),
+    content: createForm.content.trim(),
+    isMinute: true,
+    attendees: null,
   };
+
+  try {
+    const createdNote = await createNote(noteData);
+
+    if (!createdNote || !createdNote._id) {
+      throw new Error('Note ID not returned from server');
+    }
+
+    await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
+      reference_id: createdNote._id,
+      title: createdNote.title,
+    });
+
+    setCreateForm({ title: '', content: '' });
+    setShowCreateModal(false);
+    setCreateLoading(false);
+    fetchMeetingNotes();
+
+    //for success
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Meeting note created successfully.',
+      confirmButtonColor: '#3085d6'
+    });
+
+  } catch (err) {
+    setCreateLoading(false);
+
+    //for error
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err.response?.data?.message || 'Failed to create note or send to ticket API.',
+      confirmButtonColor: '#d33'
+    });
+  }
+};
+
 
   const filteredNotes = meetingNotes.filter(
     (note) =>

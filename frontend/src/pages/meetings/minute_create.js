@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNote } from '../../services/notesService';
 import axios from 'axios';
+
 import background from '../../assets/background.png';
 
 const MinuteCreate = () => {
@@ -39,6 +40,11 @@ const MinuteCreate = () => {
       });
 
       setForm({ title: '', content: '' });
+
+      console.log('Showing alert...');
+      alert("Simple popup test");
+      console.log("Form submitted");
+
       navigate('/meeting_screen');
 
     } catch (err) {
@@ -92,10 +98,7 @@ const MinuteCreate = () => {
           fontWeight: '600'
         }}>Create Meeting Note</h2>
         
-        <div style={{ 
-          position: 'relative',
-          marginBottom: '2rem'
-        }}>
+        <div style={{ position: 'relative', marginBottom: '2rem' }}>
           <div style={{
             position: 'absolute',
             bottom: 0,
@@ -149,10 +152,7 @@ const MinuteCreate = () => {
           </label>
         </div>
         
-        <div style={{ 
-          position: 'relative',
-          marginBottom: '2.5rem'
-        }}>
+        <div style={{ position: 'relative', marginBottom: '2.5rem' }}>
           <div style={{
             position: 'absolute',
             bottom: 0,
@@ -220,15 +220,7 @@ const MinuteCreate = () => {
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            marginTop: '1rem',
-            ':hover': {
-              backgroundColor: '#2563eb',
-              transform: 'translateY(-2px)',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-            },
-            ':active': {
-              transform: 'translateY(0)'
-            }
+            marginTop: '1rem'
           }}
         >
           Save Meeting Note

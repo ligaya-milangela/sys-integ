@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import '../../styles/style.css';
+import Swal from 'sweetalert2';
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -13,17 +14,32 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, form);
-      localStorage.setItem('token', res.data.token);
-      alert('Login successful!');
-      navigate('/meeting_screen');
-    } catch (err) {
-      alert(err.response.data.message || 'Login error');
-    }
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, form);
+    localStorage.setItem('token', res.data.token);
+
+    await Swal.fire({
+      icon: 'success',
+      title: 'Login Successful',
+      text: 'Welcome back!',
+      confirmButtonColor: '#3b82f6',
+      timer: 1500,
+      showConfirmButton: false
+    });
+
+    navigate('/meeting_screen');
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Login Failed',
+      text: err.response?.data?.message || 'Something went wrong. Please try again.',
+      confirmButtonColor: '#ef4444'
+    });
+  }
+};
+
 
   return (
     <section>
