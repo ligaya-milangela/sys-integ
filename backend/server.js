@@ -17,10 +17,11 @@ const allowedOrigins = [
   'https://attendance-and-notes-system.netlify.app',
   'https://next-auro.vercel.app',
   'https://itmc321announcements.onrender.com',
-  'https://localhost:8000'
+  'http://localhost:8000'
 ];
 
 app.use(cors({
+
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
