@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getNoteById, updateNote, deleteNote } from '../../services/notesService';
 import Swal from 'sweetalert2';
 import { getAllUsers } from '../../services/userService';
+import axios from 'axios';
 
 const MinuteNoteDetail = () => {
   const { id } = useParams();
@@ -75,9 +76,14 @@ const MinuteNoteDetail = () => {
       cancelButtonText: 'Cancel'
     });
 
+
+
     if (result.isConfirmed) {
       try {
         await deleteNote(id);
+        await axios.post('https://express-auro.onrender.com/api/ticket/delete', {
+        reference_id: id, 
+      });
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',

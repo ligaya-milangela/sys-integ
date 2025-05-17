@@ -21,15 +21,17 @@ const MeetingScreen = () => {
     try {
       const response = await getNotes();
       const allNotes = response.data;
-
       const notesWithStatus = await Promise.all(
         allNotes.map(async (note) => {
           try {
             const res = await getTicketStatus(note._id);
-            const ticketStatus = res.data.ticket[0]?.status || 'Unavailable';
-            return { ...note, ticketStatus };
+            console.log(res.data);
+            console.log(res);
+            const ticketStatus = res.data?.status || 'Unavailable';
+            const remarks = res.data?.remarks || 'Unavailable';
+            return { ...note, ticketStatus, remarks};
           } catch (err) {
-            return { ...note, ticketStatus: 'Unavailable' };
+            return { ...note, ticketStatus: 'Unavailable', remarks };
           }
         })
       );
@@ -91,10 +93,11 @@ const MeetingScreen = () => {
       throw new Error('Note ID not returned from server');
     }
 
-    await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
-      reference_id: createdNote._id,
-      title: createdNote.title,
-    });
+      await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
+        reference_id: createdNote._id, 
+        reference_link: 'https://sys-integ-production.up.railway.app/api/notes',
+        title: createdNote.title,
+      });
 
     setCreateForm({ title: '', content: '' });
     setShowCreateModal(false);
@@ -113,12 +116,13 @@ const MeetingScreen = () => {
     setCreateLoading(false);
 
     //for error
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: err.response?.data?.message || 'Failed to create note or send to ticket API.',
-      confirmButtonColor: '#d33'
-    });
+    // Swal.fire({
+    //   icon: 'error',
+    //   title: 'Error',
+    //   text: err.response?.data?.message || 'Failed to create note or send to ticket API.',
+    //   confirmButtonColor: '#d33'
+    // });
+    console.error(err);
   }
 };
 
@@ -551,6 +555,7 @@ const MeetingScreen = () => {
                   marginBottom: '0.5rem'
                 }}>
                   {note.ticketStatus}
+                  {note.remarks}
                 </div>
                 <div style={{
                   color: 'rgba(248, 250, 252, 0.6)',

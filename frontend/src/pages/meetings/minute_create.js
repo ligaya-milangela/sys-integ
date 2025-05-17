@@ -35,7 +35,8 @@ const MinuteCreate = () => {
       }
 
       await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
-        reference_id: createdNote._id,
+        reference_id: createdNote._id, 
+        reference_link: 'https://sys-integ-production.up.railway.app/api/notes',
         title: createdNote.title,
       });
 
