@@ -31,7 +31,7 @@ const MeetingScreen = () => {
             const remarks = res.data?.remarks || 'Unavailable';
             return { ...note, ticketStatus, remarks};
           } catch (err) {
-            return { ...note, ticketStatus: 'Unavailable', remarks };
+            return { ...note, ticketStatus: 'Unavailable', remarks: 'Unavailable' };
           }
         })
       );
@@ -119,7 +119,7 @@ const MeetingScreen = () => {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: err.response?.data?.message || 'Failed to create note.',
+      text: 'Failed to create note.',
       confirmButtonColor: '#d33'
     });
     console.error(err);
