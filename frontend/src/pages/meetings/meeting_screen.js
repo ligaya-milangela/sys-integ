@@ -116,12 +116,12 @@ const MeetingScreen = () => {
     setCreateLoading(false);
 
     //for error
-    // Swal.fire({
-    //   icon: 'error',
-    //   title: 'Error',
-    //   text: err.response?.data?.message || 'Failed to create note or send to ticket API.',
-    //   confirmButtonColor: '#d33'
-    // });
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err.response?.data?.message || 'Failed to create note.',
+      confirmButtonColor: '#d33'
+    });
     console.error(err);
   }
 };
