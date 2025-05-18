@@ -25,18 +25,20 @@ const MeetingScreen = () => {
         allNotes.map(async (note) => {
           try {
             const res = await getTicketStatus(note._id);
-            console.log(res.data);
-            console.log(res);
             const ticketStatus = res.data?.status || 'Unavailable';
             const remarks = res.data?.remarks || 'Unavailable';
-            return { ...note, ticketStatus, remarks};
+            return { ...note, ticketStatus, remarks };
           } catch (err) {
             return { ...note, ticketStatus: 'Unavailable', remarks: 'Unavailable' };
           }
         })
       );
 
-      setMeetingNotes(notesWithStatus);
+      const sortedNotes = notesWithStatus.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
+      setMeetingNotes(sortedNotes);
     } catch (err) {
       console.error('Error fetching notes:', err);
     }
@@ -76,22 +78,22 @@ const MeetingScreen = () => {
   };
 
   const handleCreateSubmit = async (e) => {
-  e.preventDefault();
-  setCreateLoading(true);
+    e.preventDefault();
+    setCreateLoading(true);
 
-  const noteData = {
-    title: createForm.title.trim(),
-    content: createForm.content.trim(),
-    isMinute: true,
-    attendees: null,
-  };
+    const noteData = {
+      title: createForm.title.trim(),
+      content: createForm.content.trim(),
+      isMinute: true,
+      attendees: null,
+    };
 
-  try {
-    const createdNote = await createNote(noteData);
+    try {
+      const createdNote = await createNote(noteData);
 
-    if (!createdNote || !createdNote._id) {
-      throw new Error('Note ID not returned from server');
-    }
+      if (!createdNote || !createdNote._id) {
+        throw new Error('Note ID not returned from server');
+      }
 
       await axios.post('https://express-auro.onrender.com/api/ticket/create/mnas', {
         reference_id: createdNote._id, 
@@ -99,33 +101,30 @@ const MeetingScreen = () => {
         title: createdNote.title,
       });
 
-    setCreateForm({ title: '', content: '' });
-    setShowCreateModal(false);
-    setCreateLoading(false);
-    fetchMeetingNotes();
+      setCreateForm({ title: '', content: '' });
+      setShowCreateModal(false);
+      setCreateLoading(false);
+      fetchMeetingNotes();
 
-    //for success
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'Meeting note created successfully.',
-      confirmButtonColor: '#3085d6'
-    });
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Meeting note created successfully.',
+        confirmButtonColor: '#3085d6'
+      });
 
-  } catch (err) {
-    setCreateLoading(false);
+    } catch (err) {
+      setCreateLoading(false);
 
-    //for error
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Failed to create note.',
-      confirmButtonColor: '#d33'
-    });
-    console.error(err);
-  }
-};
-
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to create note.',
+        confirmButtonColor: '#d33'
+      });
+      console.error(err);
+    }
+  };
 
   const filteredNotes = meetingNotes.filter(
     (note) =>
@@ -510,7 +509,7 @@ const MeetingScreen = () => {
             padding: '2rem',
             textAlign: 'center',
             color: 'rgba(248, 250, 252, 0.7)',
-            border: '1px dashed rgba(255,255,255,0.1)'
+            border: '1px dashed rgba(255,255,white,0.1)'
           }}>
             <p style={{ margin: 0, fontSize: '1.1rem' }}>
               No meeting minutes found
@@ -527,12 +526,26 @@ const MeetingScreen = () => {
               <div
                 key={note._id}
                 onClick={() => handleNoteClick(note._id)}
-                className="note-card"
+                style={{
+                  backgroundColor: 'rgba(51, 65, 85, 0.5)',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  boxSizing: 'border-box',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                  }
+                }}
               >
                 <h3 style={{
                   color: '#f8fafc',
-                  marginTop: 0,
-                  marginBottom: '1rem',
+                  margin: '0 0 0.75rem 0',
                   fontSize: '1.25rem',
                   fontWeight: '600',
                   whiteSpace: 'nowrap',
@@ -541,6 +554,7 @@ const MeetingScreen = () => {
                 }}>
                   {note.title}
                 </h3>
+                
                 <div style={{
                   display: 'inline-block',
                   backgroundColor: note.ticketStatus === 'For Approval' ? 'rgba(255, 223, 0, 0.2)' :
@@ -552,14 +566,28 @@ const MeetingScreen = () => {
                   padding: '0.25rem 0.5rem',
                   borderRadius: '4px',
                   fontSize: '0.75rem',
-                  marginBottom: '0.5rem'
+                  marginBottom: '0.75rem',
+                  alignSelf: 'flex-start'
                 }}>
                   {note.ticketStatus}
-                  {note.remarks}
                 </div>
+                
+                {note.remarks && note.remarks !== 'Unavailable' && (
+                  <div style={{
+                    color: 'rgba(248, 250, 252, 0.6)',
+                    fontSize: '0.85rem',
+                    marginBottom: '0.75rem',
+                    wordBreak: 'break-word'
+                  }}>
+                    <strong>Remarks:</strong> {note.remarks}
+                  </div>
+                )}
+                
                 <div style={{
                   color: 'rgba(248, 250, 252, 0.6)',
-                  fontSize: '0.85rem'
+                  fontSize: '0.85rem',
+                  marginTop: 'auto',
+                  alignSelf: 'flex-start'
                 }}>
                   {formatDate(note.createdAt)}
                 </div>
